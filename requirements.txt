@@ -1,0 +1,3 @@
+requests==2.12.4
+schedule==0.4.2
+slacker==0.9.30

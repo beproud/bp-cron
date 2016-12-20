@@ -13,3 +13,14 @@
 ## 元ネタ
 
 * https://project.beproud.jp/redmine/issues/51850
+
+## 環境構築
+
+```bash
+$ pyvenv-3.5 env
+$ . env/bin/activate
+(env) $ pip install -r requirements.txt
+(env) $ cp settings.py.sample settings.py
+(env) $ vi settings.py
+(env) $ python run.py
+```
