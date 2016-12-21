@@ -20,7 +20,7 @@
 $ pyvenv-3.5 env
 $ . env/bin/activate
 (env) $ pip install -r requirements.txt
-(env) $ cp settings.py.sample settings.py
-(env) $ vi settings.py
+(env) $ cp bpcron_settings.py.sample bpcron_settings.py
+(env) $ vi bpcron_settings.py
 (env) $ python run.py
 ```
