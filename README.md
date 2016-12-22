@@ -41,3 +41,19 @@ $ . env/bin/activate
 6. OAuth クライアント IDがダイアログで表示されるので「OK」をクリックして閉じる
 7. 右端のダウンロードボタンをクリックして、 `client_secret_XXXX.json` をダウンロードする
 8. ファイル名を `client_secret.json` に変更する
+
+## credentials を生成
+
+- `google_api.py` を実行するといブラウザが開いて API の許可を求めます。
+- BeProudのGoogleアカウントでAPI許可します。
+- 成功すると `credentials.json` という証明書ファイルが生成されます。
+
+```bash
+(env) $ python google_api.py
+:
+credentialsをcredentials.jsonに保存しました
+直近の5件のイベントを表示
+: (ここにGoogleカレンダーのイベントが表示される)
+(env) $ ls credentials.json
+credentials.json
+```
