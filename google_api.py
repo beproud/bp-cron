@@ -9,6 +9,7 @@ from oauth2client.file import Storage
 import settings
 
 SCOPES = [
+    'https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/calendar.readonly',
     'https://www.googleapis.com/auth/drive.metadata.readonly',
     ]
