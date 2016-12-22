@@ -1,0 +1,7 @@
+# Slack settings
+
+# Create token https://api.slack.com/docs/oauth-test-tokens
+SLACK_TOKEN = '<your-slack-api-token>'
+
+BOT_EMOJI = ':robot_face:'
+BOT_NAME = 'bp-cron'
