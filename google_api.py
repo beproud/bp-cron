@@ -16,9 +16,10 @@ SCOPES = [
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'bp-cron'
 
+
 def get_credentials():
     """
-    credentialsファイルを生成する
+    credentialsファイルが存在しない場合は認証処理を行って生成する
     """
     credential_path = settings.CREDENTIAL_PATH
     store = Storage(credential_path)
@@ -31,12 +32,20 @@ def get_credentials():
     return credentials
 
 
-def main():
+def get_service(name, version):
+    """
+    サービスを取得する
+    """
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
-    service = discovery.build('calendar', 'v3', http=http)
+    service = discovery.build(name, version, http=http)
+    return service
 
-    now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+
+def main():
+    service = get_service('calendar', 'v3')
+
+    now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     print('直近の5件のイベントを表示')
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, maxResults=5, singleEvents=True,
@@ -49,6 +58,6 @@ def main():
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
 
+
 if __name__ == '__main__':
     main()
-    
