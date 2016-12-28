@@ -3,7 +3,6 @@ from datetime import datetime
 
 from google_api import get_credentials
 
-import settings
 from utils import user, slack
 
 # スプレッドシートのID
