@@ -1,33 +1,41 @@
 import gspread
 from datetime import datetime
 
-from slacker import Slacker
 from google_api import get_credentials
 
 import settings
+from utils import user, slack
 
 # スプレッドシートのID
 SHEET_ID = '1VHHJDj-AVmQypSDIBHswNJrPV6RAQVSo3FG7lbMUSmc'
 
 BOT_NAME = '本日のリモート勤務一覧'
+BOT_EMOJI = (':clock8:', ':clock1230:')
+CHANNEL = '#bp-remote'
 
 
-def create_message(users):
+def create_message(google_accounts):
     """
     本日のリモート勤務一覧用のメッセージを作成する
+
+    :param google_accounts: リモート勤務予定者のGoogleアカウントのリスト
     """
     message = '{:%Y/%m/%d %H:%M:%S}\n'.format(datetime.now())
-    if users:
+    if google_accounts:
+        users = (user.gaccount_to_slack(ga) for ga in google_accounts)
         message += ", ".join(users)
     else:
         message += '本日は自宅作業の申請はありません。'
     return message
 
 
-def job():
+def job(morning=False):
     """
     リモート勤務の人の一覧を通知する
+
+    :param morning: True の場合朝のメッセージ(メンション付き)となる
     """
+    # TODO: 休日だったらなにもしない
     # 今日の日付
     today = '{:%Y/%m/%d}'.format(datetime.now())
 
@@ -40,17 +48,17 @@ def job():
     ws = sheet.worksheet('master')
 
     # 日付が今日の申請者一覧を取得
-    users = []
+    google_accounts = []
     for row in ws.get_all_values():
         if row[2] == today:
-            users.append(row[1])
+            google_accounts.append(row[1])
 
-    message = create_message(users)
+    message = create_message(google_accounts)
 
-    # slackで通知
-    slack = Slacker(settings.SLACK_TOKEN)
-    # :clock8'
-    slack.chat.post_message('#bot-test-takanory', message,
-                            username=BOT_NAME,
-                            icon_emoji=':clock1230:',
-                            link_names=True)
+    # 朝の場合は絵文字を変えて、メンションする
+    if morning:
+        slack.post_message(CHANNEL, message, username=BOT_NAME,
+                           icon_emoji=BOT_EMOJI[0], link_names=True)
+    else:
+        slack.post_message(CHANNEL, message, username=BOT_NAME,
+                           icon_emoji=BOT_EMOJI[1])

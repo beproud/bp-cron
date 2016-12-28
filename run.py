@@ -3,15 +3,15 @@ import time
 import schedule
 
 from time_signal import time_signal
+from jobs import remote_reminder
 
 
 def main():
-    schedule.every(1).minutes.do(time_signal)
     # https://project.beproud.jp/redmine/projects/bptools/wiki/slack-bot
     # 0:30 くらいにリモート勤務一覧
-    # schedule.every().day.at('0:30').do(remote_reminder)
+    schedule.every().day.at('0:30').do(remote_reminder.job)
     # 8:30 くらいにリモート勤務一覧(メンション付き)
-    # schedule.every().day.at('8:30').do(remote_reminder)
+    schedule.every().day.at('8:30').do(remote_reminder.job, True)
     # 5分毎にslack-reminder
     # schedule.every(5).minutes.do(slack_reminder)
     # 9:00 くらいにカレンダーからミーティング一覧

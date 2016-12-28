@@ -5,3 +5,7 @@ SLACK_TOKEN = '<your-slack-api-token>'
 
 BOT_EMOJI = ':robot_face:'
 BOT_NAME = 'bp-cron'
+
+# デバッグモードありでチャンネルを指定すると、すべてのメッセージがここに流れる
+#DEBUG = True
+#DEBUG_CHANNEL = '#bot-test'
