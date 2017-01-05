@@ -2,11 +2,10 @@ import time
 
 import schedule
 
-from jobs import remote_reminder, meeting_reminder
+from jobs import remote_reminder, meeting_reminder, birthday
 
 
 def main():
-    meeting_reminder.job()
     # https://project.beproud.jp/redmine/projects/bptools/wiki/slack-bot
     # 0:30 くらいにリモート勤務一覧
     schedule.every().day.at('0:30').do(remote_reminder.job)
@@ -22,6 +21,7 @@ def main():
     # schedule.every().wednesday.at("9:00").do(kaizen_notify)
     # schedule.every().wednesday.at("17:00").do(kaizen_notify)
     # 誕生日通知
+    schedule.every().day.at("9:30").do(birthday.job)
     # BPBP購入通知
     # 休みの人通知
     # 9:30 くらいに休みの人を通知
