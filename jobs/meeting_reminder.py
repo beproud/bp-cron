@@ -1,8 +1,8 @@
 from datetime import date
 
 from dateutil import parser
-from google_api import get_service
 
+from google_api import get_service
 from utils import user, slack
 
 # カレンダーのID
