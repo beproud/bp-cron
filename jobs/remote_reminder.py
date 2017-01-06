@@ -34,7 +34,6 @@ def job(morning=False):
 
     :param morning: True の場合朝のメッセージ(メンション付き)となる
     """
-    # TODO: 休日だったらなにもしない
     # 今日の日付
     today = '{:%Y/%m/%d}'.format(datetime.now())
 

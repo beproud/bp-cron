@@ -3,7 +3,7 @@ from datetime import date
 from dateutil import parser
 
 from google_api import get_service
-from utils import user, slack
+from utils import user, slack, holiday
 
 # カレンダーのID
 CALENDAR = {
@@ -38,7 +38,9 @@ def job():
     """
     今日の bar, showroom の予定一覧を Slack 通知する
     """
-    # TODO: 祝日対応
+    # 休みの日ならなにもしない
+    if holiday.is_holiday():
+        return
 
     # カレンダーAPIに接続
     service = get_service('calendar', 'v3')
