@@ -1,8 +1,11 @@
+import logging
 from datetime import date
 from random import choice
 
 from google_api import get_service
 from utils import slack
+
+logger = logging.getLogger(__name__)
 
 # カレンダーのID
 CALENDAR_ID = 'beproud.jp_njbpgdq8kq419opf2eq8n7njnc@group.calendar.google.com'
@@ -19,6 +22,8 @@ def job():
     """
     今日誕生日の人を通知する
     """
+    logger.info('Start job')
+
     today = '{:%Y-%m-%d}'.format(date.today())
     time_min = today + 'T00:00:00+09:00'
     time_max = today + 'T23:59:59+09:00'
@@ -41,3 +46,5 @@ def job():
     if msg:
         slack.post_message(CHANNEL, msg, username=BOT_NAME,
                            icon_emoji=BOT_EMOJI)
+
+    logger.info('End job')

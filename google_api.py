@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 import httplib2
 
@@ -7,6 +8,8 @@ from oauth2client import tools
 from oauth2client.file import Storage
 
 import settings
+
+logger = logging.getLogger(__name__)
 
 SCOPES = [
     'https://spreadsheets.google.com/feeds',

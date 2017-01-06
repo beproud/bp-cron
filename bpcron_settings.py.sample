@@ -1,3 +1,10 @@
+# Log settings
+import logging
+
+fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(format=fmt, filename='bp-cron.log', level=logging.INFO)
+# logging.basicConfig(format=fmt, level=logging.DEBUG)
+
 # Slack settings
 
 # Create token https://api.slack.com/docs/oauth-test-tokens
@@ -7,5 +14,5 @@ BOT_EMOJI = ':robot_face:'
 BOT_NAME = 'bp-cron'
 
 # デバッグモードありでチャンネルを指定すると、すべてのメッセージがここに流れる
-#DEBUG = True
-#DEBUG_CHANNEL = '#bot-test'
+# DEBUG = True
+# DEBUG_CHANNEL = '#bot-test'

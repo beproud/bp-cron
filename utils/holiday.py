@@ -1,9 +1,12 @@
+import logging
 from datetime import datetime, date, timedelta
 
 from dateutil import parser
 from dateutil.rrule import rrule, DAILY
 
 from google_api import get_service
+
+logger = logging.getLogger(__name__)
 
 # 日本の祝日カレンダー
 CALENDAR_ID = 'ja.japanese#holiday@group.v.calendar.google.com'
@@ -20,6 +23,7 @@ def update_japanese_holiday():
     """
     日本の祝日情報を更新する
     """
+    logger.info('Update japanese holiday')
     # 中身をクリアする
     holiday_set.clear()
 

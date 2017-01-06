@@ -1,9 +1,12 @@
+import logging
 from datetime import date
 
 from dateutil import parser
 
 from google_api import get_service
 from utils import user, slack, holiday
+
+logger = logging.getLogger(__name__)
 
 # カレンダーのID
 CALENDAR = {
@@ -38,6 +41,8 @@ def job():
     """
     今日の bar, showroom の予定一覧を Slack 通知する
     """
+    logger.info('Start job')
+
     # 休みの日ならなにもしない
     if holiday.is_holiday():
         return
@@ -78,3 +83,5 @@ def job():
     if result:
         slack.post_message(CHANNEL, message, username=BOT_NAME,
                            icon_emoji=BOT_EMOJI)
+
+    logger.info('End job')

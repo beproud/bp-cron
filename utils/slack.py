@@ -1,6 +1,10 @@
+import logging
+
 from slacker import Slacker
 
 import settings
+
+logger = logging.getLogger(__name__)
 
 
 def post_message(channel, message, username=None, icon_emoji=None,
@@ -14,6 +18,7 @@ def post_message(channel, message, username=None, icon_emoji=None,
     :param icon_emoji: ユーザーのアイコン
     :param link_names: True に設定するとメンションが有効になる
     """
+    logger.debug('Slack post message: channel=%s', channel)
     if not username:
         username = settings.BOT_NAME
     if not icon_emoji:
