@@ -3,6 +3,7 @@ import time
 import schedule
 
 from jobs import remote_reminder, meeting_reminder, birthday
+from utils.holiday import update_japanese_holiday
 
 
 def main():
@@ -26,6 +27,8 @@ def main():
     # 休みの人通知
     # 9:30 くらいに休みの人を通知
     # schedule.every().day.at("9:30").do(holiday)
+    # 30日ごとに祝日カレンダーを更新する
+    schedule.every(30).days.do(update_japanese_holiday)
 
     while True:
         schedule.run_pending()
