@@ -1,5 +1,5 @@
 import logging
-from datetime import date
+from datetime import date, datetime, timedelta
 
 from dateutil import parser
 
@@ -85,3 +85,51 @@ def job():
                            icon_emoji=BOT_EMOJI)
 
     logger.info('End job')
+
+
+def _send_next_meeting_message(event):
+    """
+    次のミーティング情報を Slack で送信する
+
+    :param event: イベント情報
+    https://developers.google.com/google-apps/calendar/v3/reference/events
+    """
+    print(event)
+
+
+def next_meeting(minutes=15):
+    """
+    指定した時間の範囲にあるミーティング予定を Slack 通知する
+
+    :param int minutes: 何分後までを対象とするか(default: 15分)
+    """
+    logger.info('Start next_meeting')
+
+    # 休みの日ならなにもしない
+    if holiday.is_holiday():
+        return
+
+    # カレンダーAPIに接続
+    service = get_service('calendar', 'v3')
+
+    # 検索範囲(現在時刻から minutes 分後まで)を設定
+    now = datetime.now().replace(microsecond=0)
+    time_min = now.isoformat() + '+09:00'
+    max = now + timedelta(minutes=minutes)
+    time_max = max.isoformat() + '+09:00'
+
+    for room, calendar_id in CALENDAR.items():
+        # 指定範囲内のbar, showroomの予定を取得
+        event_results = service.events().list(
+            calendarId=calendar_id,
+            timeMin=time_min,
+            timeMax=time_max,
+            maxResults=20,
+            singleEvents=True,
+            orderBy="startTime"
+        ).execute()
+
+        for event in event_results.get('items', []):
+            # 場所が指定してあったら、その slack channel に通知する
+            if event['location']:
+                _send_next_meeting_message(event)
