@@ -2,6 +2,7 @@ import logging
 from datetime import date, datetime, timedelta
 
 from dateutil import parser
+from slacker import Error
 
 from google_api import get_service
 from utils import user, slack, holiday
@@ -128,11 +129,15 @@ def _send_next_meeting_message(room, event):
             }
         ],
     }]
-    slack.post_message(location, summary, attachments=attachments,
-                       username=BOT_NAME, icon_emoji=BOT_EMOJI)
+    try:
+        slack.post_message(location, summary, attachments=attachments,
+                           username=BOT_NAME, icon_emoji=BOT_EMOJI)
+    except Error:
+        # チャンネルが存在しない場合はエラーになるので無視する
+        pass
 
 
-def next(minutes=15):
+def recent(minutes=15):
     """
     指定した時間の範囲にあるミーティング予定を Slack 通知する
 
