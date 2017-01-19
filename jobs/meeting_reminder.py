@@ -87,17 +87,52 @@ def job():
     logger.info('End job')
 
 
-def _send_next_meeting_message(event):
+def _send_next_meeting_message(room, event):
     """
     次のミーティング情報を Slack で送信する
 
+    :param str room: 部屋の名前(bar, showroom)
     :param event: イベント情報
     https://developers.google.com/google-apps/calendar/v3/reference/events
     """
-    print(event)
+    location = event['location']
+    start = parser.parse(event['start']['dateTime'])
+    end = parser.parse(event['end']['dateTime'])
+    summary = event['summary']
+    # 参加者の一覧を生成
+    attendees = []
+    for attendee in event.get('attendees', []):
+        email = attendee['email']
+        if 'group.calendar.google.com' not in email:
+            username = user.gaccount_to_slack(attendee['email'], mention=False)
+            attendees.append(username)
+
+    # メッセージのアタッチメントを作成
+    # https://api.slack.com/docs/message-attachments
+    attachments = [{
+        "fields": [
+            {
+                "title": "場所",
+                "value": room,
+                "short": True
+            },
+            {
+                "title": "時間",
+                "value": '{:%H:%M}〜{:%H:%M}'.format(start, end),
+                "short": True,
+            },
+            {
+                "title": "参加者",
+                "value": ', '.join(attendees),
+                "short": True,
+            }
+        ],
+    }]
+    slack.post_message(location, summary, attachments=attachments,
+                       username=BOT_NAME, icon_emoji=BOT_EMOJI)
 
 
-def next_meeting(minutes=15):
+def next(minutes=15):
     """
     指定した時間の範囲にあるミーティング予定を Slack 通知する
 
@@ -131,5 +166,5 @@ def next_meeting(minutes=15):
 
         for event in event_results.get('items', []):
             # 場所が指定してあったら、その slack channel に通知する
-            if event['location']:
-                _send_next_meeting_message(event)
+            if 'location' in event:
+                _send_next_meeting_message(room, event)

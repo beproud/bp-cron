@@ -7,16 +7,17 @@ import settings
 logger = logging.getLogger(__name__)
 
 
-def post_message(channel, message, username=None, icon_emoji=None,
-                 link_names=None):
+def post_message(channel, text, username=None, link_names=None,
+                 attachments=None, icon_emoji=None):
     """
     指定したパラメーターでSlackにメッセージを送信する
 
     :param channel: チャンネル名
-    :param message: 送信するメッセージ
+    :param text: 送信するメッセージのテキスト
     :param username: 表示されるユーザー名
-    :param icon_emoji: ユーザーのアイコン
     :param link_names: True に設定するとメンションが有効になる
+    :param attachments: メッセージのアタッチメント
+    :param icon_emoji: ユーザーのアイコン
     """
     logger.debug('Slack post message: channel=%s', channel)
     if not username:
@@ -28,7 +29,8 @@ def post_message(channel, message, username=None, icon_emoji=None,
 
     # slack にメッセージを送信する
     slack = Slacker(settings.SLACK_TOKEN)
-    slack.chat.post_message(channel, message,
+    slack.chat.post_message(channel, text,
                             username=username,
-                            icon_emoji=icon_emoji,
-                            link_names=link_names)
+                            link_names=link_names,
+                            attachments=attachments,
+                            icon_emoji=icon_emoji)
