@@ -50,6 +50,7 @@ def gaccount_to_slack(google_account, mention=True):
     """
     logger.debug('gaccount_to_slack: %s', google_account)
     username = GACCOUNT_SLACK_DICT.get(google_account, google_account)
+    username = username.replace('@beproud.jp', '')
     if mention:
         username = '@' + username
     return username
