@@ -1,8 +1,8 @@
 import logging
-from datetime import date
+from datetime import datetime
 from random import choice
 
-from google_api import get_service
+from utils.google_calendar import get_events
 from utils import slack
 
 logger = logging.getLogger(__name__)
@@ -24,23 +24,15 @@ def job():
     """
     logger.info('Start job')
 
-    today = '{:%Y-%m-%d}'.format(date.today())
-    time_min = today + 'T00:00:00+09:00'
-    time_max = today + 'T23:59:59+09:00'
+    # 今日の0時から23時までを範囲とする
+    now = datetime.now()
+    time_min = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    time_max = now.replace(hour=23, minute=59, second=49, microsecond=0)
 
-    # カレンダーAPIに接続
-    service = get_service('calendar', 'v3')
-    # 誕生日カレンダーにある今日の予定を取得する
-    event_results = service.events().list(
-        calendarId=CALENDAR_ID,
-        timeMin=time_min,
-        timeMax=time_max,
-        singleEvents=True,
-        orderBy="startTime"
-    ).execute()
+    # カレンダーからイベントを取得する
 
     msg = ''
-    for event in event_results.get('items', []):
+    for event in get_events(CALENDAR_ID, time_min, time_max):
         msg += '今日は {} です :{}:'.format(event['summary'], choice(EMOJI))
 
     if msg:
