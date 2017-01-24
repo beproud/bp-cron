@@ -25,7 +25,7 @@ def main():
     # 9:00 くらいにカレンダーからミーティング一覧通知
     schedule.every().day.at('9:00').do(meeting_reminder.job)
     # 15分ごとに直近のミーティング予定を通知
-    schedule.every(15).minute().do(meeting_reminder.recent)
+    schedule.every(15).minutes().do(meeting_reminder.recent)
 
     # 水曜の9時くらいにカイゼンミーティングを通知
     # schedule.every().wednesday.at("9:00").do(kaizen_notify)
