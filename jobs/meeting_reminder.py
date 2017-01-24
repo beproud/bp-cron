@@ -50,8 +50,8 @@ def job():
 
     # 検索範囲(今日一杯)を設定
     now = datetime.now()
-    time_min = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    time_max = now.replace(hour=23, minute=59, second=49, microsecond=0)
+    time_min = now.replace(hour=0, minute=0, second=0)
+    time_max = now.replace(hour=23, minute=59, second=59)
 
     events = {}
     for room, calendar_id in CALENDAR.items():
@@ -139,7 +139,7 @@ def recent(minutes=15):
         return
 
     # 検索範囲(現在時刻から minutes 分後まで)を設定
-    now = datetime.now().replace(microsecond=0)
+    now = datetime.now()
     time_max = now + timedelta(minutes=minutes)
 
     for room, calendar_id in CALENDAR.items():

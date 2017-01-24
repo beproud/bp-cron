@@ -24,10 +24,10 @@ def job():
     """
     logger.info('Start job')
 
-    # 今日の0時から23時までを範囲とする
+    # 今日の0時から23時59分59秒までを範囲とする
     now = datetime.now()
-    time_min = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    time_max = now.replace(hour=23, minute=59, second=49, microsecond=0)
+    time_min = now.replace(hour=0, minute=0, second=0)
+    time_max = now.replace(hour=23, minute=59, second=59)
 
     # カレンダーからイベントを取得する
 
