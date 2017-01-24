@@ -19,6 +19,9 @@ def get_events(calendar_id, time_min, time_max):
     """
     任意のカレンダーの指定範囲にあるイベントの一覧を返す
 
+    * https://developers.google.com/google-apps/calendar/v3/reference/events/list
+    * https://developers.google.com/resources/api-libraries/documentation/calendar/v3/python/latest/calendar_v3.events.html#list
+
     :param str calendar_id: カレンダーID
     :param datetime time_min: 検索範囲の開始日時
     :param datetime time_max: 検索範囲の終了日時
