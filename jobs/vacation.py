@@ -82,11 +82,28 @@ def _get_vacation_list_from_sheet(gc, today):
     return vacation_list
 
 
+def _create_message(vacation_list):
+    """
+    休みの人の一覧情報から slack での送信用のメッセージを作成する
+
+    :param vacation_list: 休みの人のリスト。下記の形式で入っている
+        `[('全休', 'takanory'), ('時間休', 'masaya(1時間))]
+    """
+    message = ''
+    for vtype in VACATION_TYPE:
+        # 指定の休みの人リストを取得
+        members = [v[1] for v in vacation_list if v[0] == vtype]
+        if members:
+            message += '- {}: {}\n'.format(vtype, ', '.join(members))
+
+    return message
+
+
 def daily():
     """
     今日の休みの人の一覧をSlackに通知する
     """
-    logger.info('Start job')
+    logger.info('Start daily job')
 
     # 休みの日ならなにもしない
     if holiday.is_holiday():
@@ -94,7 +111,6 @@ def daily():
 
     # 今日の日付
     today = '{:%Y/%m/%d}'.format(date.today())
-    today = '2017/01/23'
 
     # 結果を保存する領域
     vacation = {}
@@ -110,8 +126,10 @@ def daily():
     # 新シートから休みの人の情報を取得
     vacation_list.extend(_get_vacation_list_from_sheet(gc, today))
 
-    print(vacation_list)
+    # 休みの人一覧からメッセージを生成して送信
+    message = _create_message(vacation_list)
+    if message:
+        slack.post_message(CHANNEL, message, username=BOT_NAME,
+                           icon_emoji=BOT_EMOJI)
 
-    # message = create_message(google_accounts)
-
-    logger.info('End job')
+    logger.info('End daily job')
