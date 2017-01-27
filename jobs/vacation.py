@@ -82,12 +82,12 @@ def _create_message(vacation_list):
     休みの人の一覧情報から slack での送信用のメッセージを作成する
 
     :param vacation_list: 休みの人のリスト。下記の形式で入っている
-        `[('全休', 'takanory'), ('時間休', 'masaya(1時間))]
+        `[('全休', 'takanory'), ('時間休', 'masaya(1時間)')]
     """
     message = ''
     for vtype in VACATION_TYPE:
-        # 指定の休みの人リストを取得
-        members = [v[1] for v in vacation_list if v[0] == vtype]
+        # 指定の休みの人一覧を取得(set にして重複を省く)
+        members = set(v[1] for v in vacation_list if v[0] == vtype)
         if members:
             message += '- {}: {}\n'.format(vtype, ', '.join(members))
 
