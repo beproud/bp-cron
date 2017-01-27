@@ -1,10 +1,10 @@
 import logging
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 from dateutil import parser
 from slacker import Error
 
-from google_api import get_service
+from utils.google_calendar import get_events
 from utils import user, slack, holiday
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def create_message(events):
             result = True
             msg += '*{}*\n'.format(room)
         for event in events[room]:
-            msg += '-{start:%H:%M}-{end:%H:%M} {summary}(作成者: {username})\n'.format(**event)
+            msg += '- {start:%H:%M}-{end:%H:%M} {summary}(作成者: {username})\n'.format(**event)
     return msg, result
 
 
@@ -48,29 +48,18 @@ def job():
     if holiday.is_holiday():
         return
 
-    # カレンダーAPIに接続
-    service = get_service('calendar', 'v3')
-
     # 検索範囲(今日一杯)を設定
-    today = '{:%Y-%m-%d}'.format(date.today())
-    time_min = today + 'T00:00:00+09:00'
-    time_max = today + 'T23:59:59+09:00'
+    now = datetime.now()
+    time_min = now.replace(hour=0, minute=0, second=0)
+    time_max = now.replace(hour=23, minute=59, second=59)
 
     events = {}
     for room, calendar_id in CALENDAR.items():
-        # 今日のbar, showroomの予定を取得
-        event_results = service.events().list(
-            calendarId=calendar_id,
-            timeMin=time_min,
-            timeMax=time_max,
-            maxResults=20,
-            singleEvents=True,
-            orderBy="startTime"
-        ).execute()
-
         # 一覧表示に必要な情報だけを events に入れる
         events[room] = []
-        for event in event_results.get('items', []):
+
+        # 今日のbar, showroomの予定を取得
+        for event in get_events(calendar_id, time_min, time_max):
             username = user.gaccount_to_slack(event['creator']['email'],
                                               mention=False)
             events[room].append({
@@ -149,27 +138,13 @@ def recent(minutes=15):
     if holiday.is_holiday():
         return
 
-    # カレンダーAPIに接続
-    service = get_service('calendar', 'v3')
-
     # 検索範囲(現在時刻から minutes 分後まで)を設定
-    now = datetime.now().replace(microsecond=0)
-    time_min = now.isoformat() + '+09:00'
-    max = now + timedelta(minutes=minutes)
-    time_max = max.isoformat() + '+09:00'
+    now = datetime.now()
+    time_max = now + timedelta(minutes=minutes)
 
     for room, calendar_id in CALENDAR.items():
         # 指定範囲内のbar, showroomの予定を取得
-        event_results = service.events().list(
-            calendarId=calendar_id,
-            timeMin=time_min,
-            timeMax=time_max,
-            maxResults=20,
-            singleEvents=True,
-            orderBy="startTime"
-        ).execute()
-
-        for event in event_results.get('items', []):
+        for event in get_events(calendar_id, now, time_max):
             # 場所が指定してあったら、その slack channel に通知する
             if 'location' in event:
                 _send_next_meeting_message(room, event)
