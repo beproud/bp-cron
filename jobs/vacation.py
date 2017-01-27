@@ -55,43 +55,23 @@ def _get_type_str(type_str):
     return type_str
 
 
-def _get_vacation_list_from_old_sheet(worksheet, today):
+def _get_vacation_list_from_sheet(worksheet, col_info, today):
     """
     旧シートから指定された日付が休みの人の一覧を取得する
 
     :param worksheet: Google Spreadsheet の任意のワークシート
+    :param col_info: シートの列情報
     :param today: 今日を表す文字列(YYYY/MM/DD)
     """
     vacation_list = []
 
     # 日付が今日の申請者一覧を取得
     for row in worksheet.get_all_values():
-        if row[OldColInfo.target] == today:
-            name = user.gaccount_to_slack(row[OldColInfo.email], mention=False)
-            type_str = _get_type_str(row[OldColInfo.vtype])
+        if row[col_info.target] == today:
+            name = user.gaccount_to_slack(row[col_info.email], mention=False)
+            type_str = _get_type_str(row[col_info.vtype])
             if type_str == '時間休':
-                name += '({})'.format(row[OldColInfo.time])
-            vacation_list.append((type_str, name))
-
-    return vacation_list
-
-
-def _get_vacation_list_from_sheet(worksheet, today):
-    """
-    旧シートから指定された日付が休みの人の一覧を取得する
-
-    :param worksheet: Google Spreadsheet の任意のワークシート
-    :param today: 今日を表す文字列(YYYY/MM/DD)
-    """
-    vacation_list = []
-
-    # 日付が今日の申請者一覧を取得
-    for row in worksheet.get_all_values():
-        if row[ColInfo.target] == today:
-            name = user.gaccount_to_slack(row[ColInfo.email], mention=False)
-            type_str = _get_type_str(row[ColInfo.vtype])
-            if type_str == '時間休':
-                name += '({}時間)'.format(row[ColInfo.time])
+                name += '({}時間)'.format(row[col_info.time])
             vacation_list.append((type_str, name))
 
     return vacation_list
@@ -139,13 +119,13 @@ def daily():
     # 新シートから休みの人の情報を取得
     sheet = gc.open_by_key(SHEET_ID)
     ws = sheet.worksheet('master')
-    vacation_list = _get_vacation_list_from_sheet(ws, today)
+    vacation_list = _get_vacation_list_from_sheet(ws, ColInfo, today)
 
     # 旧シートから休みの人の情報を取得
     # TODO: 将来的に削除する
     sheet = gc.open_by_key(OLD_SHEET_ID)
     ws = sheet.worksheet('master')
-    vacation_list.extend(_get_vacation_list_from_old_sheet(ws, today))
+    vacation_list.extend(_get_vacation_list_from_sheet(ws, OldColInfo, today))
 
     # 休みの人一覧からメッセージを生成して送信
     message = _create_message(vacation_list)
