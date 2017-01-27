@@ -1,5 +1,6 @@
 import logging
 from datetime import date
+from enum import IntEnum
 
 import gspread
 from google_api import get_credentials
@@ -18,6 +19,28 @@ CHANNEL = '#general'
 VACATION_TYPE = ('全休', '午前半休', '午後半休', '時間休')
 
 
+class OldColInfo(IntEnum):
+    """
+    旧シートの列情報
+
+    TODO: 将来的に削除する
+    """
+    email = 1   # メールアドレス
+    target = 3  # 休みの対象日
+    vtype = 4   # 休みの種類
+    time = 6    # 時間休の時間
+
+
+class ColInfo(IntEnum):
+    """
+    新シートの列情報
+    """
+    email = 1   # メールアドレス
+    target = 2  # 休みの対象日
+    vtype = 5   # 休みの種類
+    time = 6    # 時間休の時間
+
+
 def _get_type_str(type_str):
     """
     休みの種別の文字列を返す
@@ -32,51 +55,43 @@ def _get_type_str(type_str):
     return type_str
 
 
-def _get_vacation_list_from_old_sheet(gc, today):
+def _get_vacation_list_from_old_sheet(worksheet, today):
     """
     旧シートから指定された日付が休みの人の一覧を取得する
 
-    :param gc: Google Spreadshhet へのアクセス用のインスタンス
+    :param worksheet: Google Spreadsheet の任意のワークシート
     :param today: 今日を表す文字列(YYYY/MM/DD)
     """
     vacation_list = []
 
-    # スプレッドシートの任意のワークシートを開く
-    sheet = gc.open_by_key(OLD_SHEET_ID)
-    ws = sheet.worksheet('master')
-
     # 日付が今日の申請者一覧を取得
-    for row in ws.get_all_values():
-        if row[3] == today:
-            name = user.gaccount_to_slack(row[1], mention=False)
-            type_str = _get_type_str(row[4])
+    for row in worksheet.get_all_values():
+        if row[OldColInfo.target] == today:
+            name = user.gaccount_to_slack(row[OldColInfo.email], mention=False)
+            type_str = _get_type_str(row[OldColInfo.vtype])
             if type_str == '時間休':
-                name += '({})'.format(row[6])
+                name += '({})'.format(row[OldColInfo.time])
             vacation_list.append((type_str, name))
 
     return vacation_list
 
 
-def _get_vacation_list_from_sheet(gc, today):
+def _get_vacation_list_from_sheet(worksheet, today):
     """
     旧シートから指定された日付が休みの人の一覧を取得する
 
-    :param gc: Google Spreadshhet へのアクセス用のインスタンス
+    :param worksheet: Google Spreadsheet の任意のワークシート
     :param today: 今日を表す文字列(YYYY/MM/DD)
     """
     vacation_list = []
 
-    # スプレッドシートの任意のワークシートを開く
-    sheet = gc.open_by_key(SHEET_ID)
-    ws = sheet.worksheet('master')
-
     # 日付が今日の申請者一覧を取得
-    for row in ws.get_all_values():
-        if row[2] == today:
-            name = user.gaccount_to_slack(row[1], mention=False)
-            type_str = _get_type_str(row[5])
+    for row in worksheet.get_all_values():
+        if row[ColInfo.target] == today:
+            name = user.gaccount_to_slack(row[ColInfo.email], mention=False)
+            type_str = _get_type_str(row[ColInfo.vtype])
             if type_str == '時間休':
-                name += '({}時間)'.format(row[6])
+                name += '({}時間)'.format(row[ColInfo.time])
             vacation_list.append((type_str, name))
 
     return vacation_list
@@ -121,10 +136,16 @@ def daily():
     credentials = get_credentials()
     gc = gspread.authorize(credentials)
 
-    # 旧シートから休みの人の情報を取得
-    vacation_list = _get_vacation_list_from_old_sheet(gc, today)
     # 新シートから休みの人の情報を取得
-    vacation_list.extend(_get_vacation_list_from_sheet(gc, today))
+    sheet = gc.open_by_key(SHEET_ID)
+    ws = sheet.worksheet('master')
+    vacation_list = _get_vacation_list_from_sheet(ws, today)
+
+    # 旧シートから休みの人の情報を取得
+    # TODO: 将来的に削除する
+    sheet = gc.open_by_key(OLD_SHEET_ID)
+    ws = sheet.worksheet('master')
+    vacation_list.extend(_get_vacation_list_from_old_sheet(ws, today))
 
     # 休みの人一覧からメッセージを生成して送信
     message = _create_message(vacation_list)
