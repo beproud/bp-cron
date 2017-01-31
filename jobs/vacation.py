@@ -1,5 +1,5 @@
 import logging
-from datetime import date
+from datetime import date, datetime
 from enum import IntEnum
 
 import gspread
@@ -134,3 +134,24 @@ def daily():
                            icon_emoji=BOT_EMOJI)
 
     logger.info('End daily job')
+
+
+def new():
+    """
+    追加で休みを申請した人の情報を通知する
+    """
+    logger.info('Start new job')
+
+    # 休みの日ならなにもしない
+    if holiday.is_holiday():
+        return
+
+    now = datetime.now()
+    now_str = '{:%H:%M}'.format(now)
+    # 9:30から18:00の間だけ実行する
+    if now_str < '09:30' or now_str > '18:00':
+        return
+
+    # TODO: シートの最後の情報を取得して、今日の情報なら通知する
+
+    logger.info('End new job')
