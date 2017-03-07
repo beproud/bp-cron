@@ -1,10 +1,7 @@
 import logging
 from datetime import datetime
 
-import gspread
-from google_api import get_credentials
-
-from utils import user, slack
+from utils import user, slack, google_sheets
 
 logger = logging.getLogger(__name__)
 
@@ -42,17 +39,12 @@ def job(morning=False):
     # 今日の日付
     today = '{:%Y/%m/%d}'.format(datetime.now())
 
-    # 認証処理
-    credentials = get_credentials()
-    gc = gspread.authorize(credentials)
-
-    # スプレッドシートの任意のワークシートを開く
-    sheet = gc.open_by_key(SHEET_ID)
-    ws = sheet.worksheet('master')
+    # スプレッドシートの指定のシートのデータを取得
+    values = google_sheets.get_all_values(SHEET_ID, 'master')
 
     # 日付が今日の申請者一覧を取得
     google_accounts = []
-    for row in ws.get_all_values():
+    for row in values:
         if row[2] == today:
             google_accounts.append(row[1])
 
