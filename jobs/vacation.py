@@ -116,7 +116,8 @@ def daily():
     # 旧シートから休みの人の情報を取得
     # TODO: 将来的に削除する
     values = google_sheets.get_all_values(OLD_SHEET_ID, 'master')
-    vacation_list.extend(_get_vacation_list_from_sheet(values, OldColInfo, today))
+    vacation_list.extend(_get_vacation_list_from_sheet(
+        values, OldColInfo, today))
 
     # 休みの人一覧からメッセージを生成して送信
     message = _create_message(vacation_list)
