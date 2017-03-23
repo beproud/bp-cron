@@ -19,8 +19,7 @@ def main():
     schedule.every().day.at('8:30').do(remote_reminder.job, True)
 
     # 5分毎にslack-reminder
-    # https://github.com/beproud/bp-cron/issues/6
-    # schedule.every(5).minutes.do(slack_reminder.job)
+    # schedule.every(5).minutes.do(slack_reminder)
 
     # 9:00 くらいにカレンダーからミーティング一覧通知
     schedule.every().day.at('9:00').do(meeting_reminder.job)
