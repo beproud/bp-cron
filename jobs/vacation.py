@@ -98,11 +98,11 @@ def daily():
     """
     今日の休みの人の一覧をSlackに通知する
     """
-    logger.info('Start daily job')
-
     # 休みの日ならなにもしない
     if holiday.is_holiday():
         return
+
+    logger.info('Start daily job')
 
     # 今日の日付
     today = '{:%Y/%m/%d}'.format(date.today())
@@ -140,18 +140,16 @@ def new():
     """
     追加で休みを申請した人の情報を通知する
     """
-    logger.info('Start new job')
-
     # 休みの日ならなにもしない
     if holiday.is_holiday():
         return
 
+    logger.info('Start new job')
+
     now = datetime.now()
     now_str = '{:%H:%M}'.format(now)
     # 9:30から18:00の間だけ実行する
-    if now_str < '09:30' or now_str > '18:00':
+    if not ('09:30' < now_str < '18:00'):
         return
-
-    # TODO: シートの最後の情報を取得して、今日の情報なら通知する
 
     logger.info('End new job')
