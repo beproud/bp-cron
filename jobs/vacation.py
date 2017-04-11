@@ -7,25 +7,12 @@ from utils import user, slack, holiday, google_sheets
 logger = logging.getLogger(__name__)
 
 # スプレッドシートのID
-OLD_SHEET_ID = '1v-Asl9Lt8RAddTaCMSwrQZe1csDePvtdnzSetEg9F8E'
 SHEET_ID = '11N3HudIAvn7sKTrMpu_CHYPXFK8L-SBa3AogL6kH96s'
 
 BOT_NAME = '本日のお休み一覧'
 BOT_EMOJI = ':palm_tree:'
 CHANNEL = '#general'
 VACATION_TYPE = ('全休', '午前半休', '午後半休', '時間休')
-
-
-class OldColInfo(IntEnum):
-    """
-    旧シートの列情報
-
-    TODO: 将来的に削除する
-    """
-    email = 1   # メールアドレス
-    target = 3  # 休みの対象日
-    vtype = 4   # 休みの種類
-    time = 6    # 時間休の時間
 
 
 class ColInfo(IntEnum):
@@ -112,12 +99,6 @@ def daily():
     # 新シートから休みの人の情報を取得
     values = google_sheets.get_all_values(SHEET_ID, 'master')
     vacation_list = _get_vacation_list_from_sheet(values, ColInfo, today)
-
-    # 旧シートから休みの人の情報を取得
-    # TODO: 将来的に削除する
-    values = google_sheets.get_all_values(OLD_SHEET_ID, 'master')
-    vacation_list.extend(_get_vacation_list_from_sheet(
-        values, OldColInfo, today))
 
     # 休みの人一覧からメッセージを生成して送信
     message = _create_message(vacation_list)
