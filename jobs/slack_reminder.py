@@ -22,6 +22,9 @@ def job():
     now = datetime.now()
     # 全データを取得
     values = google_sheets.get_all_values(SHEET_ID, 'reminder')
-    for value in values[:3]:
+    for value in values[1:]:
+        # TODO: コメント行を無視
+        # TODO: 時間をチェック
+        # TODO: 日付をチェック
+        # TODO: メッセージを送信する
         print(value)
-
