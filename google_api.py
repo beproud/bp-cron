@@ -40,7 +40,7 @@ def get_service(name, version):
     サービスを取得する
     """
     credentials = get_credentials()
-    http = credentials.authorize(httplib2.Http())
+    http = credentials.authorize(httplib2.Http(cache=".cache"))
     service = discovery.build(name, version, http=http)
     return service
 
