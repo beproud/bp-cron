@@ -5,6 +5,7 @@ service: bp-cron
 provider:
   name: aws
   runtime: python3.7
+  region: ${env:AWS_DEFAULT_REGION}
 
 # Package
 package:
@@ -19,11 +20,28 @@ package:
     - README.md
     - package.json
     - package-lock.json
+    - Makefile
+    - LICENSE
+    - ChangeLog.txt
 
 # Lambda functions
 functions:
   birthday:
-    handler: src/birthday.job
+    handler: src/handler/birthday.job
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+    events:
+      - schedule: cron(0/1 * * * ? *)
+
+  meeting_reminder:
+    handler: src/handler/meeting_reminder.job
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+    events:
+      - schedule: cron(0/1 * * * ? *)
+
+  remote_reminder:
+    handler: src/handler/remote_reminder.job
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:

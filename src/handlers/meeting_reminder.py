@@ -1,19 +1,17 @@
-import logging
 from datetime import datetime, timedelta
 
 from dateutil import parser
 from slacker import Error
 
-from utils.google_calendar import get_events
-from utils import user, slack, holiday
+from src.utils.google_calendar import get_events
+from src.utils import user, slack, holiday
 
-logger = logging.getLogger(__name__)
 
 # カレンダーのID
 CALENDAR = {
     'bar': 'beproud.jp_9h9kerkookmotnjmagadgo7j2k@group.calendar.google.com',
     'showroom': 'beproud.jp_qvrqd9512tu4v1jpvf8iek5vco@group.calendar.google.com',
-    }
+}
 
 BOT_NAME = '今日の会議室の利用予定'
 BOT_EMOJI = ':calendar:'
@@ -42,7 +40,7 @@ def job():
     """
     今日の bar, showroom の予定一覧を Slack 通知する
     """
-    logger.info('Start job')
+    print('Start job')
 
     # 休みの日ならなにもしない
     if holiday.is_holiday():
@@ -74,7 +72,7 @@ def job():
         slack.post_message(CHANNEL, message, username=BOT_NAME,
                            icon_emoji=BOT_EMOJI)
 
-    logger.info('End job')
+    print('End job')
 
 
 def _send_next_meeting_message(room, event):
@@ -132,7 +130,7 @@ def recent(minutes=15):
 
     :param int minutes: 何分後までを対象とするか(default: 15分)
     """
-    logger.info('Start next_meeting')
+    print('Start next_meeting')
 
     # 休みの日ならなにもしない
     if holiday.is_holiday():

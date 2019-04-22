@@ -28,7 +28,7 @@ def job(event, context):
 
     # カレンダーからイベントを取得する
 
-    msg = 'test'
+    msg = ''
     for event in get_events(CALENDAR_ID, time_min, time_max):
         msg += '今日は {} です :{}:'.format(event['summary'], choice(EMOJI))
 

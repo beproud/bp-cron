@@ -1,9 +1,6 @@
-import logging
 from datetime import datetime
 
-from utils import user, slack, google_sheets
-
-logger = logging.getLogger(__name__)
+from src.utils import user, slack, google_sheets
 
 # スプレッドシートのID
 SHEET_ID = '1VHHJDj-AVmQypSDIBHswNJrPV6RAQVSo3FG7lbMUSmc'
@@ -34,7 +31,7 @@ def job(morning=False):
 
     :param morning: True の場合朝のメッセージ(メンション付き)となる
     """
-    logger.info('Start job')
+    print('Start job')
 
     # 今日の日付
     today = '{:%Y/%m/%d}'.format(datetime.now())
@@ -58,4 +55,4 @@ def job(morning=False):
         slack.post_message(CHANNEL, message, username=BOT_NAME,
                            icon_emoji=BOT_EMOJI[1])
 
-    logger.info('End job')
+    print('End job')
