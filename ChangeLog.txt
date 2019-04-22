@@ -1,6 +1,8 @@
 Unreleased
 ----------
 
+- [lambda_version] lambda対応
+
 Release Notes - 2017-01-27
 --------------------------
 - [#7] 本日のお休み一覧通知

@@ -1,4 +1,4 @@
-import logging
+import os
 from datetime import datetime
 import httplib2
 
@@ -6,32 +6,43 @@ from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
+# from google_auth_oauthlib.flow import Flow
+# from google_auth_oauthlib.flow import InstalledAppFlow
 
-import settings
-
-logger = logging.getLogger(__name__)
+# from src import settings
 
 SCOPES = [
     'https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/calendar.readonly',
     'https://www.googleapis.com/auth/drive.metadata.readonly',
-    ]
+]
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'bp-cron'
 
 
+# def get_credentials():
+#     """
+#     credentialsファイルが存在しない場合は認証処理を行って生成する
+#     """
+#     credential_path = settings.CREDENTIAL_PATH
+#     print(f'credential_path:{credential_path}')
+#     print(store)
+#     store = Storage(credential_path)
+#     credentials = store.get()
+#     if not credentials or credentials.invalid:
+#         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+#         flow.user_agent = APPLICATION_NAME
+#         credentials = tools.run_flow(flow, store)
+#         print('credentialsを{}に保存しました'.format(credential_path))
+#     return credentials
+
+
 def get_credentials():
-    """
-    credentialsファイルが存在しない場合は認証処理を行って生成する
-    """
-    credential_path = settings.CREDENTIAL_PATH
-    store = Storage(credential_path)
-    credentials = store.get()
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-        credentials = tools.run_flow(flow, store)
-        print('credentialsを{}に保存しました'.format(credential_path))
+    basepath = os.path.split(os.path.realpath(__file__))[0]
+    path = os.path.join(basepath, 'credentials.json')
+    f = open(path, 'rb')
+    content = f.read()
+    credentials = client.Credentials.new_from_json(content)
     return credentials
 
 

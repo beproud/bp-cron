@@ -1,4 +1,4 @@
-from google_api import get_service
+from src.utils.google_api import get_service
 
 
 def _get_time_str(datetime_):

@@ -1,7 +1,3 @@
-import logging
-
-logger = logging.getLogger(__name__)
-
 # Google アカウントと Slack username の対応表
 GACCOUNT_SLACK_DICT = {
     'ae35@beproud.jp': 'ae35',
@@ -48,7 +44,7 @@ def gaccount_to_slack(google_account, mention=True):
     :param google_account: Googleアカウント
     :param mention: Trueの場合にusernameの前に '@' を付けて返す
     """
-    logger.debug('gaccount_to_slack: %s', google_account)
+    print('gaccount_to_slack: %s', google_account)
     username = GACCOUNT_SLACK_DICT.get(google_account, google_account)
     username = username.replace('@beproud.jp', '')
     if mention:

@@ -1,4 +1,4 @@
-from google_api import get_service
+from src.utils.google_api import get_service
 
 
 def get_all_values(sheet_id, sheet_name):

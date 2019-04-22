@@ -1,0 +1,45 @@
+# Service name
+service: bp-cron
+
+# Provider
+provider:
+  name: aws
+  runtime: python3.7
+
+# Package
+package:
+  individually: true
+  include:
+    - src/**
+  exclude:
+    - env/**
+    - .git/
+    - .gitignore
+    - node_modules/**
+    - README.md
+    - package.json
+    - package-lock.json
+
+# Lambda functions
+functions:
+  birthday:
+    handler: src/birthday.job
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+    events:
+      - schedule: cron(0/1 * * * ? *)
+
+# Plugins
+plugins:
+  - serverless-python-requirements
+
+# Custom settings
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    slim: true
+    layer: true
+
+
+# lambda
+timeout: 60

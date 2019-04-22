@@ -1,10 +1,9 @@
-import logging
-
 from slacker import Slacker
-
 import settings
 
-logger = logging.getLogger(__name__)
+BOT_NAME = '誕生日'
+BOT_EMOJI = ':birthday:'
+CHANNEL = '#bot-test-wan'
 
 
 def post_message(channel, text, username=None, link_names=None,
@@ -19,7 +18,7 @@ def post_message(channel, text, username=None, link_names=None,
     :param attachments: メッセージのアタッチメント
     :param icon_emoji: ユーザーのアイコン
     """
-    logger.debug('Slack post message: channel=%s', channel)
+    print('Slack post message: channel=%s', channel)
     if not username:
         username = settings.BOT_NAME
     if not icon_emoji:
@@ -34,3 +33,13 @@ def post_message(channel, text, username=None, link_names=None,
                             link_names=link_names,
                             attachments=attachments,
                             icon_emoji=icon_emoji)
+
+
+def main(event, context):
+    """
+    今日誕生日の人を通知する
+    """
+#     slack = Slacker(settings.SLACK_TOKEN)
+    print('Start job')
+    post_message(CHANNEL, "test", username=BOT_NAME, icon_emoji=BOT_EMOJI)
+    print('End job')

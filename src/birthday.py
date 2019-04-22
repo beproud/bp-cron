@@ -1,11 +1,8 @@
-import logging
 from datetime import datetime
 from random import choice
 
-from utils.google_calendar import get_events
-from utils import slack
-
-logger = logging.getLogger(__name__)
+from src.utils.google_calendar import get_events
+from src.utils import slack
 
 # カレンダーのID
 CALENDAR_ID = 'beproud.jp_njbpgdq8kq419opf2eq8n7njnc@group.calendar.google.com'
@@ -15,14 +12,14 @@ EMOJI = ('beer', 'beers', 'tada', 'confetti_ball')
 
 BOT_NAME = '誕生日'
 BOT_EMOJI = ':birthday:'
-CHANNEL = '#random'
+CHANNEL = '#bot-test-wan'
 
 
-def job():
+def job(event, context):
     """
     今日誕生日の人を通知する
     """
-    logger.info('Start job')
+    print('Start job')
 
     # 今日の0時から23時59分59秒までを範囲とする
     now = datetime.now()
@@ -31,7 +28,7 @@ def job():
 
     # カレンダーからイベントを取得する
 
-    msg = ''
+    msg = 'test'
     for event in get_events(CALENDAR_ID, time_min, time_max):
         msg += '今日は {} です :{}:'.format(event['summary'], choice(EMOJI))
 
@@ -39,4 +36,4 @@ def job():
         slack.post_message(CHANNEL, msg, username=BOT_NAME,
                            icon_emoji=BOT_EMOJI)
 
-    logger.info('End job')
+    print('End job')

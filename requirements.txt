@@ -19,3 +19,6 @@ schedule==0.4.2
 six==1.10.0
 slacker==0.9.42
 uritemplate==3.0.0
+
+google-auth==1.6.3
+google-auth-oauthlib==0.3.0
