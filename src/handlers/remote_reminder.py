@@ -25,6 +25,14 @@ def create_message(google_accounts):
     return message
 
 
+def morning_job(event, context):
+    job(morning=True)
+
+
+def night_job(event, context):
+    job()
+
+
 def job(morning=False):
     """
     リモート勤務の人の一覧を通知する

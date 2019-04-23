@@ -15,7 +15,8 @@ CALENDAR = {
 
 BOT_NAME = '今日の会議室の利用予定'
 BOT_EMOJI = ':calendar:'
-CHANNEL = '#bp-employees'
+# CHANNEL = '#bp-employees'
+CHANNEL = '#bot-test-wan'
 
 
 def create_message(events):
@@ -36,7 +37,7 @@ def create_message(events):
     return msg, result
 
 
-def job():
+def job(event, context):
     """
     今日の bar, showroom の予定一覧を Slack 通知する
     """
@@ -124,7 +125,7 @@ def _send_next_meeting_message(room, event):
         pass
 
 
-def recent(minutes=15):
+def recent(event, context):
     """
     指定した時間の範囲にあるミーティング予定を Slack 通知する
 
@@ -137,8 +138,9 @@ def recent(minutes=15):
         return
 
     # 検索範囲(現在時刻から minutes 分後まで)を設定
+    # TODO: 固定値にしていいかtakanoryさんに確認
     now = datetime.now()
-    time_max = now + timedelta(minutes=minutes)
+    time_max = now + timedelta(minutes=15)
 
     for room, calendar_id in CALENDAR.items():
         # 指定範囲内のbar, showroomの予定を取得

@@ -20,8 +20,7 @@ def update_japanese_holiday():
     日本の祝日情報を更新する
     """
     print('Update japanese holiday')
-    # 中身をクリアする
-    holiday_set.clear()
+    holiday_set = set()
 
     # 年末年始休暇を設定
     newyear_rule = rrule(freq=DAILY, dtstart=START, until=END)
@@ -45,6 +44,8 @@ def update_japanese_holiday():
         holiday = parser.parse(event['start']['date']).date()
         holiday_set.add(holiday)
 
+    return holiday_set
+
 
 def is_holiday(date_data=date.today()):
     """
@@ -53,6 +54,14 @@ def is_holiday(date_data=date.today()):
     :param date: 日付(文字列、datetime、date型のいずれか)
     :reutrn: True - 祝日、False - 平日
     """
+    global holiday_set
+
+    # lambdaのインスタンスは再利用される、ただしインスタンスが切り替わるタイミングはAWSが決定する
+    # インスタンス変数が空ならインスタンスが再利用されなかったとして更新
+    # TODO: /tmpに500MB割り当てれるらしい、jsonか何かで書き込み/読み込みするようにした方がいいかもしれん
+    if not holiday_set:
+        holiday_set = update_japanese_holiday()
+
     if isinstance(date_data, datetime):
         # datetime は date に変換する
         date_data = date_data.date()
@@ -72,7 +81,3 @@ def is_holiday(date_data=date.today()):
         return True
 
     return False
-
-
-# 日本の祝日情報を初期化する
-update_japanese_holiday()

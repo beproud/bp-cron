@@ -6,6 +6,12 @@ provider:
   name: aws
   runtime: python3.7
   region: ${env:AWS_DEFAULT_REGION}
+  logRetentionInDays: 14
+  # TODO: 固定のバケット作る
+  # deploymentBucket:
+  #   name: serverless-deployment
+  environment:
+    TZ: Asia/Tokyo
 
 # Package
 package:
@@ -23,33 +29,49 @@ package:
     - Makefile
     - LICENSE
     - ChangeLog.txt
+    - requirements.txt
 
 # Lambda functions
 functions:
   birthday:
-    handler: src/handler/birthday.job
+    handler: src/handlers/birthday.job
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(0/1 * * * ? *)
+      - schedule: cron(30 9 * * ? *)
 
   meeting_reminder:
-    handler: src/handler/meeting_reminder.job
+    handler: src/handlers/meeting_reminder.job
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(0/1 * * * ? *)
+      - schedule: cron(0 9 * * ? *)
 
-  remote_reminder:
-    handler: src/handler/remote_reminder.job
+  meeting_reminder_recent:
+    handler: src/handlers/meeting_reminder.recent
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(0/1 * * * ? *)
+      - schedule: cron(0/15 8-18 * * ? *)
+
+  remote_reminder_morning:
+    handler: src/handlers/remote_reminder.morning_job
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+    events:
+      - schedule: cron(30 8 * * ? *)
+
+  remote_reminder_night:
+     handler: src/handlers/remote_reminder.night_job
+     layers:
+       - {Ref: PythonRequirementsLambdaLayer}
+     events:
+       - schedule: cron(30 00 * * ? *)
 
 # Plugins
 plugins:
   - serverless-python-requirements
+  - serverless-prune-plugin
 
 # Custom settings
 custom:
@@ -57,7 +79,9 @@ custom:
     dockerizePip: true
     slim: true
     layer: true
-
+  prune:
+    automatic: true
+    number: 3
 
 # lambda
 timeout: 60

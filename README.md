@@ -16,6 +16,10 @@
 
 ## 環境構築
 
+* node.js
+* Python3
+* Docker
+
 ```bash
 $ python3.5 -m venv env
 $ . env/bin/activate

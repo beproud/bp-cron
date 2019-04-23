@@ -2,11 +2,11 @@
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  deploy          to deploy apps"
-	@echo "  remove          to remove apps"
+	@echo "  deploy          to deploy lambda app."
+	@echo "  remove          to remove lambda app."
 	@echo "  test            to exeute all tests."
 	@echo "  pip-install     to install python packages requirements.txt."
-	@echo "  help            to show this help messages"
+	@echo "  help            to show this help messages."
 
 deploy:
 	./node_modules/serverless/bin/serverless deploy
