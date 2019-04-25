@@ -9,7 +9,7 @@ provider:
   logRetentionInDays: 14
   # TODO: 固定のバケット作る
   # deploymentBucket:
-  #   name: serverless-deployment
+  #   name: ${env:AWS_S3_BUCKET_NAME}
   environment:
     TZ: Asia/Tokyo
 

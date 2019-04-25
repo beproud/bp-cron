@@ -1,48 +1,38 @@
 import os
+import pickle
 from datetime import datetime
-import httplib2
 
-from apiclient import discovery
-from oauth2client import client
-from oauth2client import tools
-from oauth2client.file import Storage
-# from google_auth_oauthlib.flow import Flow
-# from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
-# from src import settings
 
 SCOPES = [
-    'https://spreadsheets.google.com/feeds',
-    'https://www.googleapis.com/auth/calendar.readonly',
-    'https://www.googleapis.com/auth/drive.metadata.readonly',
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/calendar.readonly",
+    "https://www.googleapis.com/auth/drive.metadata.readonly",
 ]
 CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'bp-cron'
-
-
-# def get_credentials():
-#     """
-#     credentialsファイルが存在しない場合は認証処理を行って生成する
-#     """
-#     credential_path = settings.CREDENTIAL_PATH
-#     print(f'credential_path:{credential_path}')
-#     print(store)
-#     store = Storage(credential_path)
-#     credentials = store.get()
-#     if not credentials or credentials.invalid:
-#         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-#         flow.user_agent = APPLICATION_NAME
-#         credentials = tools.run_flow(flow, store)
-#         print('credentialsを{}に保存しました'.format(credential_path))
-#     return credentials
 
 
 def get_credentials():
     basepath = os.path.split(os.path.realpath(__file__))[0]
-    path = os.path.join(basepath, 'credentials.json')
-    f = open(path, 'rb')
-    content = f.read()
-    credentials = client.Credentials.new_from_json(content)
+    client_secret_path = os.path.join(basepath, CLIENT_SECRET_FILE)
+    credential_path = os.path.join(basepath, 'credential.pickle')
+    credentials = None
+    if os.path.exists(credential_path):
+        with open(credential_path, 'rb') as token:
+            credentials = pickle.load(token)
+    if not credentials or not credentials.valid:
+        if credentials and credentials.expired and credentials.refresh_token:
+            credentials.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                client_secret_path, SCOPES
+            )
+            credentials = flow.run_local_server()
+        with open(credential_path, 'wb') as token:
+            pickle.dump(credentials, token)
     return credentials
 
 
@@ -51,8 +41,7 @@ def get_service(name, version):
     サービスを取得する
     """
     credentials = get_credentials()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build(name, version, http=http)
+    service = build(name, version, credentials=credentials)
     return service
 
 
