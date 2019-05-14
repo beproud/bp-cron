@@ -56,9 +56,6 @@ def is_holiday(date_data=date.today()):
     """
     global holiday_set
 
-    # lambdaのインスタンスは再利用される、ただしインスタンスが切り替わるタイミングはAWSが決定する
-    # インスタンス変数が空ならインスタンスが再利用されなかったとして更新
-    # TODO: /tmpに500MB割り当てれるらしい、jsonか何かで書き込み/読み込みするようにした方がいいかもしれん
     if not holiday_set:
         holiday_set = update_japanese_holiday()
 

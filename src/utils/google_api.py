@@ -8,9 +8,9 @@ from google.auth.transport.requests import Request
 
 
 SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/calendar.readonly",
-    "https://www.googleapis.com/auth/drive.metadata.readonly",
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/calendar.readonly',
+    'https://www.googleapis.com/auth/drive.metadata.readonly',
 ]
 CLIENT_SECRET_FILE = 'client_secret.json'
 
@@ -23,7 +23,7 @@ def get_credentials():
     if os.path.exists(credential_path):
         with open(credential_path, 'rb') as token:
             credentials = pickle.load(token)
-    if not credentials or not credentials.valid:
+    if not credentials:
         if credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
         else:
@@ -41,7 +41,8 @@ def get_service(name, version):
     サービスを取得する
     """
     credentials = get_credentials()
-    service = build(name, version, credentials=credentials)
+    # ref https://github.com/googleapis/google-api-python-client/issues/299
+    service = build(name, version, credentials=credentials, cache_discovery=False)
     return service
 
 

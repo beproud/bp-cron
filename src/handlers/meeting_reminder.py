@@ -15,8 +15,7 @@ CALENDAR = {
 
 BOT_NAME = '今日の会議室の利用予定'
 BOT_EMOJI = ':calendar:'
-# CHANNEL = '#bp-employees'
-CHANNEL = '#bot-test-wan'
+CHANNEL = '#bp-employees'
 
 
 def create_message(events):

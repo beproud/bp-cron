@@ -12,7 +12,7 @@ EMOJI = ('beer', 'beers', 'tada', 'confetti_ball')
 
 BOT_NAME = '誕生日'
 BOT_EMOJI = ':birthday:'
-CHANNEL = '#bot-test-wan'
+CHANNEL = '#random'
 
 
 def job(event, context):

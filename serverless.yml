@@ -7,9 +7,8 @@ provider:
   runtime: python3.7
   region: ${env:AWS_DEFAULT_REGION}
   logRetentionInDays: 14
-  # TODO: 固定のバケット作る
-  # deploymentBucket:
-  #   name: ${env:AWS_S3_BUCKET_NAME}
+  deploymentBucket:
+   name: ${env:AWS_S3_BUCKET_NAME}
   environment:
     TZ: Asia/Tokyo
 
@@ -38,35 +37,35 @@ functions:
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(30 9 * * ? *)
+      - schedule: cron(30 00 * * ? *)
 
   meeting_reminder:
     handler: src/handlers/meeting_reminder.job
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(0 9 * * ? *)
+      - schedule: cron(0 00 * * ? *)
 
   meeting_reminder_recent:
     handler: src/handlers/meeting_reminder.recent
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(0/15 8-18 * * ? *)
+      - schedule: cron(0/15 9-23 * * ? *)
 
   remote_reminder_morning:
     handler: src/handlers/remote_reminder.morning_job
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(30 8 * * ? *)
+      - schedule: cron(30 23 * * ? *)
 
   remote_reminder_night:
      handler: src/handlers/remote_reminder.night_job
      layers:
        - {Ref: PythonRequirementsLambdaLayer}
      events:
-       - schedule: cron(30 00 * * ? *)
+       - schedule: cron(30 15 * * ? *)
 
 # Plugins
 plugins:

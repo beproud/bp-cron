@@ -1,6 +1,6 @@
 from slacker import Slacker
 
-from src import bpcron_settings
+from src import settings
 
 
 def post_message(channel, text, username=None, link_names=None,
@@ -17,14 +17,14 @@ def post_message(channel, text, username=None, link_names=None,
     """
     print('Slack post message: channel=%s', channel)
     if not username:
-        username = bpcron_settings.BOT_NAME
+        username = settings.BOT_NAME
     if not icon_emoji:
-        icon_emoji = bpcron_settings.BOT_EMOJI
-    if bpcron_settings.DEBUG and bpcron_settings.DEBUG_CHANNEL:
-        channel = bpcron_settings.DEBUG_CHANNEL
+        icon_emoji = settings.BOT_EMOJI
+    if settings.DEBUG and settings.DEBUG_CHANNEL:
+        channel = settings.DEBUG_CHANNEL
 
     # slack にメッセージを送信する
-    slack = Slacker(bpcron_settings.SLACK_TOKEN)
+    slack = Slacker(settings.SLACK_TOKEN)
     slack.chat.post_message(channel, text,
                             username=username,
                             link_names=link_names,
