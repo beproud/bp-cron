@@ -32,6 +32,7 @@ package:
 
 # Lambda functions
 functions:
+  # 誕生日通知
   birthday:
     handler: src/handlers/birthday.job
     layers:
@@ -39,6 +40,7 @@ functions:
     events:
       - schedule: cron(30 00 * * ? *)
 
+  # 9:00 くらいにカレンダーからミーティング一覧通知
   meeting_reminder:
     handler: src/handlers/meeting_reminder.job
     layers:
@@ -46,6 +48,7 @@ functions:
     events:
       - schedule: cron(0 00 * * ? *)
 
+  # 直近開催のミーティングを通知
   meeting_reminder_recent:
     handler: src/handlers/meeting_reminder.recent
     layers:
@@ -53,6 +56,7 @@ functions:
     events:
       - schedule: cron(0/15 9-23 * * ? *)
 
+  # 8:30 くらいにリモート勤務一覧(メンション付き)
   remote_reminder_morning:
     handler: src/handlers/remote_reminder.morning_job
     layers:
@@ -60,6 +64,7 @@ functions:
     events:
       - schedule: cron(30 23 * * ? *)
 
+  # 0:30 くらいにリモート勤務一覧
   remote_reminder_night:
      handler: src/handlers/remote_reminder.night_job
      layers:

@@ -5,7 +5,7 @@ help:
 	@echo "  deploy             to deploy lambda app."
 	@echo "  remove             to remove lambda app."
 	@echo "  test               to exeute all tests."
-	@echo "  create-credentials to create credentials.json."
+	@echo "  create-credentials to create credentials.pickle."
 	@echo "  help               to show this help messages."
 
 deploy:

@@ -15,7 +15,7 @@ def post_message(channel, text, username=None, link_names=None,
     :param attachments: メッセージのアタッチメント
     :param icon_emoji: ユーザーのアイコン
     """
-    print('Slack post message: channel=%s', channel)
+    print('Slack post message: channel={channel}')
     if not username:
         username = settings.BOT_NAME
     if not icon_emoji:

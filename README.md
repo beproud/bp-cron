@@ -29,6 +29,20 @@ $ . env/bin/activate
 (env) $ vi src/bpcron_settings.py
 ```
 
+## Makefile
+
+* 主要なコマンドはMakefileにしているので適宜のぞいてください。
+
+```bash
+$ make
+Please use `make <target>' where <target> is one of
+ deploy             to deploy lambda app.
+ remove             to remove lambda app.
+ test               to exeute all tests.
+ create-credentials to create credentials.pickle.
+ help               to show this help messages.
+```
+
 ## 必要な Google API を有効にする
 
 以下の手順で、bp-cron の中で使用する Google API を有効にする。
@@ -54,10 +68,14 @@ $ . env/bin/activate
 
 ```bash
 (env) $ make create-credentials
-:
-credentialsをcredentials.jsonに保存しました
 直近の5件のイベントを表示
 : (ここにGoogleカレンダーのイベントが表示される)
 (env) $ ls ./src/utils/credential.pickle
 ./src/utils/credential.pickle
+```
+
+### ローカル環境でのタスクの実行方法
+
+```bash
+$sls invoke local --function <Lambda function name>
 ```
