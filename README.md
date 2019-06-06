@@ -36,11 +36,14 @@ $ . env/bin/activate
 ```bash
 $ make
 Please use `make <target>' where <target> is one of
- deploy             to deploy lambda app.
- remove             to remove lambda app.
- test               to exeute all tests.
- create-credentials to create credentials.pickle.
- help               to show this help messages.
+  deploy             to deploy lambda app.
+  remove             to remove lambda app.
+  test_app           to exeute lambda application tests
+  test               to exeute all tests.
+  create_credentials to create credentials.pickle.
+  black              to exeute auto format python codes by black.
+  flake8             to exeute flake8 to python codes.
+  help               to show this help messages.
 ```
 
 ## 必要な Google API を有効にする
@@ -62,12 +65,12 @@ Please use `make <target>' where <target> is one of
 
 ## credentials を生成
 
-- `make create-credentials` を実行するといブラウザが開いて API の許可を求めます。
+- `make create_credentials` を実行するとブラウザが開いて API の許可を求めます。
 - BeProudのGoogleアカウントでAPI許可します。
 - 成功すると `credentials.pickle` という証明書ファイルが生成されます。
 
 ```bash
-(env) $ make create-credentials
+(env) $ make create_credentials
 直近の5件のイベントを表示
 : (ここにGoogleカレンダーのイベントが表示される)
 (env) $ ls ./src/utils/credential.pickle
@@ -78,4 +81,14 @@ Please use `make <target>' where <target> is one of
 
 ```bash
 $sls invoke local --function <Lambda function name>
+```
+
+### インフラ構成図
+
+* https://tracery.jp/s/646a036e4b5a417799b28f59fb6d5919
+
+### 本番環境デプロイ
+
+```bash
+make deploy
 ```

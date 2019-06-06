@@ -1,13 +1,16 @@
+import logging
 from datetime import datetime
 
-from src.utils import user, slack, google_sheets
+from src.utils import google_sheets, slack, user
 
 # スプレッドシートのID
-SHEET_ID = '1VHHJDj-AVmQypSDIBHswNJrPV6RAQVSo3FG7lbMUSmc'
+SHEET_ID = "1VHHJDj-AVmQypSDIBHswNJrPV6RAQVSo3FG7lbMUSmc"
 
-BOT_NAME = '本日のリモート勤務一覧'
-BOT_EMOJI = (':clock8:', ':clock1230:')
-CHANNEL = '#bp-remote'
+BOT_NAME = "本日のリモート勤務一覧"
+BOT_EMOJI = (":clock8:", ":clock1230:")
+CHANNEL = "#bp-remote"
+
+logger = logging.getLogger(__name__)
 
 
 def create_message(google_accounts):
@@ -16,12 +19,12 @@ def create_message(google_accounts):
 
     :param google_accounts: リモート勤務予定者のGoogleアカウントのリスト
     """
-    message = '{:%Y/%m/%d %H:%M:%S}\n'.format(datetime.now())
+    message = "{:%Y/%m/%d %H:%M:%S}\n".format(datetime.now())
     if google_accounts:
         users = (user.gaccount_to_slack(ga) for ga in google_accounts)
         message += ", ".join(users)
     else:
-        message += '本日は自宅作業の申請はありません。'
+        message += "本日は自宅作業の申請はありません。"
     return message
 
 
@@ -39,13 +42,13 @@ def job(morning=False):
 
     :param morning: True の場合朝のメッセージ(メンション付き)となる
     """
-    print('Start job')
+    logger.info("Start job")
 
     # 今日の日付
-    today = '{:%Y/%m/%d}'.format(datetime.now())
+    today = "{:%Y/%m/%d}".format(datetime.now())
 
     # スプレッドシートの指定のシートのデータを取得
-    values = google_sheets.get_all_values(SHEET_ID, 'master')
+    values = google_sheets.get_all_values(SHEET_ID, "master")
 
     # 日付が今日の申請者一覧を取得
     google_accounts = []
@@ -57,10 +60,14 @@ def job(morning=False):
 
     # 朝の場合は絵文字を変えて、メンションする
     if morning:
-        slack.post_message(CHANNEL, message, username=BOT_NAME,
-                           icon_emoji=BOT_EMOJI[0], link_names=True)
+        slack.post_message(
+            CHANNEL,
+            message,
+            username=BOT_NAME,
+            icon_emoji=BOT_EMOJI[0],
+            link_names=True,
+        )
     else:
-        slack.post_message(CHANNEL, message, username=BOT_NAME,
-                           icon_emoji=BOT_EMOJI[1])
+        slack.post_message(CHANNEL, message, username=BOT_NAME, icon_emoji=BOT_EMOJI[1])
 
-    print('End job')
+    logger.info("End job")

@@ -1,10 +1,15 @@
+import logging
+
 from slacker import Slacker
 
 from src import settings
 
+logger = logging.getLogger(__name__)
 
-def post_message(channel, text, username=None, link_names=None,
-                 attachments=None, icon_emoji=None):
+
+def post_message(
+    channel, text, username=None, link_names=None, attachments=None, icon_emoji=None
+):
     """
     指定したパラメーターでSlackにメッセージを送信する
 
@@ -15,7 +20,7 @@ def post_message(channel, text, username=None, link_names=None,
     :param attachments: メッセージのアタッチメント
     :param icon_emoji: ユーザーのアイコン
     """
-    print('Slack post message: channel={channel}')
+    logger.info(f"Slack post message: channel={channel}")
     if not username:
         username = settings.BOT_NAME
     if not icon_emoji:
@@ -25,8 +30,11 @@ def post_message(channel, text, username=None, link_names=None,
 
     # slack にメッセージを送信する
     slack = Slacker(settings.SLACK_TOKEN)
-    slack.chat.post_message(channel, text,
-                            username=username,
-                            link_names=link_names,
-                            attachments=attachments,
-                            icon_emoji=icon_emoji)
+    slack.chat.post_message(
+        channel,
+        text,
+        username=username,
+        link_names=link_names,
+        attachments=attachments,
+        icon_emoji=icon_emoji,
+    )

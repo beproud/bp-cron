@@ -1,11 +1,12 @@
-from datetime import datetime, date, timedelta
+import logging
+from datetime import date, datetime, timedelta
 
 from dateutil import parser
-from dateutil.rrule import rrule, DAILY
+from dateutil.rrule import DAILY, rrule
 
 from src.utils.google_api import get_service
 
-CALENDAR_ID = 'ja.japanese#holiday@group.v.calendar.google.com'
+CALENDAR_ID = "ja.japanese#holiday@group.v.calendar.google.com"
 
 # 日本の祝日を入れておくセット
 holiday_set = set()
@@ -14,12 +15,14 @@ holiday_set = set()
 START = date(2016, 12, 29)
 END = date(2017, 1, 4)
 
+logger = logging.getLogger(__name__)
+
 
 def update_japanese_holiday():
     """
     日本の祝日情報を更新する
     """
-    print('Update japanese holiday')
+    logger.info("Update japanese holiday")
     holiday_set = set()
 
     # 年末年始休暇を設定
@@ -29,19 +32,19 @@ def update_japanese_holiday():
     # カレンダーの検索範囲は今日から一年後まで
     today = date.today()
     next_year = today + timedelta(days=365)
-    today_str = '{:%Y-%m-%d}T00:00:00+09:00'.format(today)
-    next_year_str = '{:%Y-%m-%d}T00:00:00+09:00'.format(next_year)
+    today_str = "{:%Y-%m-%d}T00:00:00+09:00".format(today)
+    next_year_str = "{:%Y-%m-%d}T00:00:00+09:00".format(next_year)
     # カレンダーAPIに接続
-    service = get_service('calendar', 'v3')
+    service = get_service("calendar", "v3")
 
     # 日本の祝日カレンダーにある予定を取得する
-    event_results = service.events().list(
-        calendarId=CALENDAR_ID,
-        timeMin=today_str,
-        timeMax=next_year_str
-    ).execute()
-    for event in event_results.get('items', []):
-        holiday = parser.parse(event['start']['date']).date()
+    event_results = (
+        service.events()
+        .list(calendarId=CALENDAR_ID, timeMin=today_str, timeMax=next_year_str)
+        .execute()
+    )
+    for event in event_results.get("items", []):
+        holiday = parser.parse(event["start"]["date"]).date()
         holiday_set.add(holiday)
 
     return holiday_set
