@@ -39,6 +39,7 @@ package:
 # Lambda functions
 functions:
   # 誕生日通知
+  # https://tracery.jp/s/f4c338a716074e17bbb242a696de006c
   birthday:
     handler: src/handlers/birthday.job
     layers:
@@ -47,6 +48,7 @@ functions:
       - schedule: cron(30 00 * * ? *)
 
   # 9:00 くらいにカレンダーからミーティング一覧通知
+  # https://tracery.jp/s/08a63d6bcaba4e7388af40de3dc4453c
   meeting_reminder:
     handler: src/handlers/meeting_reminder.job
     layers:
@@ -55,6 +57,7 @@ functions:
       - schedule: cron(0 00 * * ? *)
 
   # 直近開催のミーティングを通知
+  # https://tracery.jp/s/f34f8f8f368b4c3c9ef5726375e08c22
   meeting_reminder_recent:
     handler: src/handlers/meeting_reminder.recent
     layers:
@@ -63,6 +66,7 @@ functions:
       - schedule: cron(0/15 9-23 * * ? *)
 
   # 8:30 くらいにリモート勤務一覧(メンション付き)
+  # https://tracery.jp/s/a5e79c929933400f95adc0656b268c49
   remote_reminder_morning:
     handler: src/handlers/remote_reminder.morning_job
     layers:
@@ -71,6 +75,7 @@ functions:
       - schedule: cron(30 23 * * ? *)
 
   # 0:30 くらいにリモート勤務一覧
+  # https://tracery.jp/s/a5e79c929933400f95adc0656b268c49
   remote_reminder_night:
      handler: src/handlers/remote_reminder.night_job
      layers:
