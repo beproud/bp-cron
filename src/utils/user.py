@@ -45,6 +45,10 @@ GACCOUNT_SLACK_DICT = {
     "hiroyuki.furihata@beproud.jp": "furi",
     "susumu.ishigami@beproud.jp": "susumuis",
     "yui.ohsaki@beproud.jp": "nana",
+    "daiki.hirayama@beproud.jp": "hirayama",
+    "satomi.konekuni@beproud.jp": "konie",
+    "yuji.imamura@beproud.jp": "imaxyz",
+    "hajime.kawanishi@beproud.jp": "hajimo",
 }
 
 

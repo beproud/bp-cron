@@ -7,13 +7,19 @@ from slacker import Error
 from src.utils import holiday, slack, user
 from src.utils.google_calendar import get_events
 
+BAR = "bar(20)"
+SHOWROOM = "showroom(5)"
+MADOGIWA = "madogiwa(6)"
+ZOOM_TAKANORY = "zoom_takanory(100)"
+
 # カレンダーのID
 CALENDAR = {
-    "bar": "beproud.jp_9h9kerkookmotnjmagadgo7j2k@group.calendar.google.com",
-    "showroom": "beproud.jp_qvrqd9512tu4v1jpvf8iek5vco@group.calendar.google.com",
+    BAR: "beproud.jp_1883iqgkfa6esi3cmvg49h2i9clna6gb6cs3gd9n60s32d9l6g@resource.calendar.google.com", # NOQA
+    SHOWROOM: "beproud.jp_1886bcjnjrs50j20ip16ufnpap2io6ga68q3adpp64qj4d1k@resource.calendar.google.com", # NOQA
+    MADOGIWA: "beproud.jp_188bk12tilr6cjdlh321lefu6me0i6gb68rj4dpn70q36cpo6o@resource.calendar.google.com", # NOQA
+    ZOOM_TAKANORY: "beproud.jp_188bcfric73vejvqim1abu7mkaa9i6gb64oj6e9m6gq3ge9n60@resource.calendar.google.com", # NOQA
 }
 
-BOT_NAME = "今日の会議室の利用予定"
 BOT_EMOJI = ":calendar:"
 CHANNEL = "#bp-employees"
 
@@ -28,7 +34,7 @@ def create_message(events):
     """
     msg = ""
     result = False
-    for room in "bar", "showroom":
+    for room in BAR, SHOWROOM, MADOGIWA, ZOOM_TAKANORY:
         # 予定があれば部屋名を追加
         if events[room]:
             result = True
@@ -42,7 +48,7 @@ def create_message(events):
 
 def job(event, context):
     """
-    今日の bar, showroom の予定一覧を Slack 通知する
+    今日の bar, showroom, madogiwa, zoom_takanory の予定一覧を Slack 通知する
     """
     logger.info("Start job")
 
@@ -74,7 +80,9 @@ def job(event, context):
 
     message, result = create_message(events)
     if result:
-        slack.post_message(CHANNEL, message, username=BOT_NAME, icon_emoji=BOT_EMOJI)
+        slack.post_message(
+            CHANNEL, message, username="今日の会議室の利用予定", icon_emoji=BOT_EMOJI
+        )
 
     logger.info("End job")
 
@@ -83,7 +91,7 @@ def _send_next_meeting_message(room, event):
     """
     次のミーティング情報を Slack で送信する
 
-    :param str room: 部屋の名前(bar, showroom)
+    :param str room: 部屋の名前(bar, showroom, madogiwa, zoom_takanory)
     :param event: イベント情報
     https://developers.google.com/google-apps/calendar/v3/reference/events
     """
@@ -119,8 +127,9 @@ def _send_next_meeting_message(room, event):
             location,
             summary,
             attachments=attachments,
-            username=BOT_NAME,
+            username="Calendar bot",
             icon_emoji=BOT_EMOJI,
+            link_names=True,
         )
     except Error:
         # チャンネルが存在しない場合はエラーになるので無視する
@@ -130,8 +139,6 @@ def _send_next_meeting_message(room, event):
 def recent(event, context):
     """
     指定した時間の範囲にあるミーティング予定を Slack 通知する
-
-    :param int minutes: 何分後までを対象とするか(default: 15分)
     """
     logger.info("Start next_meeting")
 
@@ -139,8 +146,7 @@ def recent(event, context):
     if holiday.is_holiday():
         return
 
-    # 検索範囲(現在時刻から minutes 分後まで)を設定
-    # TODO: 固定値にしていいかtakanoryさんに確認
+    # 検索範囲(現在時刻から 15 分後まで)を設定
     now = datetime.now()
     time_max = now + timedelta(minutes=15)
 
