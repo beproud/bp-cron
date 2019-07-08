@@ -4,7 +4,8 @@ from slacker import Slacker
 
 from src import settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel(settings.LOG_LEVEL)
 
 
 def post_message(
@@ -20,7 +21,7 @@ def post_message(
     :param attachments: メッセージのアタッチメント
     :param icon_emoji: ユーザーのアイコン
     """
-    logger.info(f"Slack post message: channel={channel}")
+    logger.debug("Slack post message: channel=%s", channel)
     if not username:
         username = settings.BOT_NAME
     if not icon_emoji:

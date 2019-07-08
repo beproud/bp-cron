@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 from slacker import Error
 
+from src import settings
 from src.utils import holiday, slack, user
 from src.utils.google_calendar import get_events
 
@@ -14,16 +15,17 @@ ZOOM_TAKANORY = "zoom_takanory(100)"
 
 # カレンダーのID
 CALENDAR = {
-    BAR: "beproud.jp_1883iqgkfa6esi3cmvg49h2i9clna6gb6cs3gd9n60s32d9l6g@resource.calendar.google.com", # NOQA
-    SHOWROOM: "beproud.jp_1886bcjnjrs50j20ip16ufnpap2io6ga68q3adpp64qj4d1k@resource.calendar.google.com", # NOQA
-    MADOGIWA: "beproud.jp_188bk12tilr6cjdlh321lefu6me0i6gb68rj4dpn70q36cpo6o@resource.calendar.google.com", # NOQA
-    ZOOM_TAKANORY: "beproud.jp_188bcfric73vejvqim1abu7mkaa9i6gb64oj6e9m6gq3ge9n60@resource.calendar.google.com", # NOQA
+    BAR: "beproud.jp_1883iqgkfa6esi3cmvg49h2i9clna6gb6cs3gd9n60s32d9l6g@resource.calendar.google.com",  # NOQA
+    SHOWROOM: "beproud.jp_1886bcjnjrs50j20ip16ufnpap2io6ga68q3adpp64qj4d1k@resource.calendar.google.com",  # NOQA
+    MADOGIWA: "beproud.jp_188bk12tilr6cjdlh321lefu6me0i6gb68rj4dpn70q36cpo6o@resource.calendar.google.com",  # NOQA
+    ZOOM_TAKANORY: "beproud.jp_188bcfric73vejvqim1abu7mkaa9i6gb64oj6e9m6gq3ge9n60@resource.calendar.google.com",  # NOQA
 }
 
 BOT_EMOJI = ":calendar:"
 CHANNEL = "#bp-employees"
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel(settings.LOG_LEVEL)
 
 
 def create_message(events):

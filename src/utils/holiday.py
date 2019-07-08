@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 from dateutil import parser
 from dateutil.rrule import DAILY, rrule
 
+from src import settings
 from src.utils.google_api import get_service
 
 CALENDAR_ID = "ja.japanese#holiday@group.v.calendar.google.com"
@@ -15,7 +16,8 @@ holiday_set = set()
 START = date(2016, 12, 29)
 END = date(2017, 1, 4)
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel(settings.LOG_LEVEL)
 
 
 def update_japanese_holiday():

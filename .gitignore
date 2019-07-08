@@ -1,5 +1,5 @@
-bpcron_settings.py
-src/bpcron_settings.py
+settings.py
+src/settings.py
 client_secret.json
 credential.pickle
 # Byte-compiled / optimized / DLL files

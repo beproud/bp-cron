@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 
+from src import settings
 from src.utils import google_sheets, slack, user
 
 # スプレッドシートのID
@@ -10,7 +11,8 @@ BOT_NAME = "本日のリモート勤務一覧"
 BOT_EMOJI = (":clock8:", ":clock1230:")
 CHANNEL = "#bp-remote"
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel(settings.LOG_LEVEL)
 
 
 def create_message(google_accounts):

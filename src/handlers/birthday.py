@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 from random import choice
 
+from src import settings
 from src.utils import slack
 from src.utils.google_calendar import get_events
 
@@ -15,7 +16,8 @@ BOT_NAME = "誕生日"
 BOT_EMOJI = ":birthday:"
 CHANNEL = "#random"
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel(settings.LOG_LEVEL)
 
 
 def job(event, context):

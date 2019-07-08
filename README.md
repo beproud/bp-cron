@@ -25,8 +25,8 @@ $ python3.7 -m venv env
 $ . env/bin/activate
 (env) $ pip install -r requirements.txt
 (env) $ npm install
-(env) $ cp src/bpcron_settings.py.sample src/bpcron_settings.py
-(env) $ vi src/bpcron_settings.py
+(env) $ cp src/settings.py.sample src/settings.py
+(env) $ vi src/settings.py
 ```
 
 ## Makefile
