@@ -27,6 +27,7 @@ $ . env/bin/activate
 (env) $ npm install
 (env) $ cp src/settings.py.sample src/settings.py
 (env) $ vi src/settings.py
+(env) $ touch src/config/user.ini
 ```
 
 ## Makefile

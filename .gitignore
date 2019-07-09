@@ -1,5 +1,5 @@
-settings.py
 src/settings.py
+src/config/user.ini
 client_secret.json
 credential.pickle
 # Byte-compiled / optimized / DLL files

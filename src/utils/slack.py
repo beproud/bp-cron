@@ -5,7 +5,6 @@ from slacker import Slacker
 from src import settings
 
 logger = logging.getLogger()
-logger.setLevel(settings.LOG_LEVEL)
 
 
 def post_message(

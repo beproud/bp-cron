@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from dateutil import parser
 from slacker import Error
 
-from src import settings
 from src.utils import holiday, slack, user
 from src.utils.google_calendar import get_events
 
@@ -25,7 +24,6 @@ BOT_EMOJI = ":calendar:"
 CHANNEL = "#bp-employees"
 
 logger = logging.getLogger()
-logger.setLevel(settings.LOG_LEVEL)
 
 
 def create_message(events):

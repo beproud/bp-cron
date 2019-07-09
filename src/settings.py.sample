@@ -1,7 +1,8 @@
 # logging
 import logging
 
-LOG_LEVEL = logging.DEBUG
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 # Slack settings
 

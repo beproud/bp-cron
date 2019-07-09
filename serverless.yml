@@ -65,24 +65,6 @@ functions:
     events:
       - schedule: cron(0/15 9-23 * * ? *)
 
-  # 8:30 くらいにリモート勤務一覧(メンション付き)
-  # https://tracery.jp/s/a5e79c929933400f95adc0656b268c49
-  remote_reminder_morning:
-    handler: src/handlers/remote_reminder.morning_job
-    layers:
-      - {Ref: PythonRequirementsLambdaLayer}
-    events:
-      - schedule: cron(30 23 * * ? *)
-
-  # 0:30 くらいにリモート勤務一覧
-  # https://tracery.jp/s/a5e79c929933400f95adc0656b268c49
-  remote_reminder_night:
-     handler: src/handlers/remote_reminder.night_job
-     layers:
-       - {Ref: PythonRequirementsLambdaLayer}
-     events:
-       - schedule: cron(30 15 * * ? *)
-
 # Plugins
 plugins:
   - serverless-python-requirements
