@@ -28,6 +28,8 @@ $ . env/bin/activate
 (env) $ cp src/settings.py.sample src/settings.py
 (env) $ vi src/settings.py
 (env) $ touch src/config/user.ini
+# Show https://tracery.jp/s/60e2885e834347ee93e6e6130f503770
+(env) $ vi src/config/user.ini
 ```
 
 ## Makefile
