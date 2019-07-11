@@ -1,7 +1,6 @@
-Unreleased
-----------
-
-- [lambda_version] lambda対応
+Release Notes - 2019-07-11
+--------------------------
+- [lambda_version] AWS lambda対応
 
 Release Notes - 2017-01-27
 --------------------------

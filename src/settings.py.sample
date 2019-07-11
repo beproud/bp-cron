@@ -1,5 +1,7 @@
-# logging
+import os
 import logging
+
+# logging
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -15,3 +17,7 @@ BOT_NAME = 'bp-cron'
 # デバッグモードありでチャンネルを指定すると、すべてのメッセージがここに流れる
 # DEBUG = True
 # DEBUG_CHANNEL = '#bot-test'
+
+# ユーザー情報の設定ファイル
+here = os.path.dirname(__file__)
+USER_CONFIG_PATH = os.path.join(here, "config", "user.ini")

@@ -10,7 +10,7 @@ from src.utils.google_calendar import get_events
 BAR = "bar(20)"
 SHOWROOM = "showroom(5)"
 MADOGIWA = "madogiwa(6)"
-ZOOM_TAKANORY = "zoom_takanory(100)"
+ZOOM_TAKANORY = "Zoom takanory(100)"
 
 # カレンダーのID
 CALENDAR = {
@@ -147,7 +147,7 @@ def is_send_message(event):
     start = parser.parse(event["start"]["dateTime"])
     if "location" not in event:
         return channel, False
-    now = datetime.now(tz.gettz('Asia/Tokyo'))
+    now = datetime.now(tz.gettz("Asia/Tokyo"))
     # 開始時刻が現在時刻より前のイベントを対象にする
     if now > start:
         return channel, False
