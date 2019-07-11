@@ -1,9 +1,10 @@
-# Log settings
+import os
 import logging
 
-fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-logging.basicConfig(format=fmt, filename='bp-cron.log', level=logging.INFO)
-# logging.basicConfig(format=fmt, level=logging.DEBUG)
+# logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 # Slack settings
 
@@ -16,3 +17,7 @@ BOT_NAME = 'bp-cron'
 # デバッグモードありでチャンネルを指定すると、すべてのメッセージがここに流れる
 # DEBUG = True
 # DEBUG_CHANNEL = '#bot-test'
+
+# ユーザー情報の設定ファイル
+here = os.path.dirname(__file__)
+USER_CONFIG_PATH = os.path.join(here, "config", "user.ini")

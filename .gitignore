@@ -1,6 +1,7 @@
-bpcron_settings.py
+src/settings.py
+src/config/user.ini
 client_secret.json
-credentials.json
+credential.pickle
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -36,6 +37,7 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+npm-debug.log
 
 # Unit test / coverage reports
 htmlcov/
@@ -90,3 +92,12 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# dependencies
+node_modules
+
+# serverless-python-requirements
+.serverless
+
+# Mac
+.DS_Store

@@ -1,15 +1,12 @@
 import logging
-from datetime import datetime, date, timedelta
+from datetime import date, datetime, timedelta
 
 from dateutil import parser
-from dateutil.rrule import rrule, DAILY
+from dateutil.rrule import DAILY, rrule
 
-from google_api import get_service
+from src.utils.google_api import get_service
 
-logger = logging.getLogger(__name__)
-
-# 日本の祝日カレンダー
-CALENDAR_ID = 'ja.japanese#holiday@group.v.calendar.google.com'
+CALENDAR_ID = "ja.japanese#holiday@group.v.calendar.google.com"
 
 # 日本の祝日を入れておくセット
 holiday_set = set()
@@ -18,14 +15,15 @@ holiday_set = set()
 START = date(2016, 12, 29)
 END = date(2017, 1, 4)
 
+logger = logging.getLogger()
+
 
 def update_japanese_holiday():
     """
     日本の祝日情報を更新する
     """
-    logger.info('Update japanese holiday')
-    # 中身をクリアする
-    holiday_set.clear()
+    logger.info("Update japanese holiday")
+    holiday_set = set()
 
     # 年末年始休暇を設定
     newyear_rule = rrule(freq=DAILY, dtstart=START, until=END)
@@ -34,20 +32,22 @@ def update_japanese_holiday():
     # カレンダーの検索範囲は今日から一年後まで
     today = date.today()
     next_year = today + timedelta(days=365)
-    today_str = '{:%Y-%m-%d}T00:00:00+09:00'.format(today)
-    next_year_str = '{:%Y-%m-%d}T00:00:00+09:00'.format(next_year)
+    today_str = "{:%Y-%m-%d}T00:00:00+09:00".format(today)
+    next_year_str = "{:%Y-%m-%d}T00:00:00+09:00".format(next_year)
     # カレンダーAPIに接続
-    service = get_service('calendar', 'v3')
+    service = get_service("calendar", "v3")
 
     # 日本の祝日カレンダーにある予定を取得する
-    event_results = service.events().list(
-        calendarId=CALENDAR_ID,
-        timeMin=today_str,
-        timeMax=next_year_str
-    ).execute()
-    for event in event_results.get('items', []):
-        holiday = parser.parse(event['start']['date']).date()
+    event_results = (
+        service.events()
+        .list(calendarId=CALENDAR_ID, timeMin=today_str, timeMax=next_year_str)
+        .execute()
+    )
+    for event in event_results.get("items", []):
+        holiday = parser.parse(event["start"]["date"]).date()
         holiday_set.add(holiday)
+
+    return holiday_set
 
 
 def is_holiday(date_data=date.today()):
@@ -57,6 +57,11 @@ def is_holiday(date_data=date.today()):
     :param date: 日付(文字列、datetime、date型のいずれか)
     :reutrn: True - 祝日、False - 平日
     """
+    global holiday_set
+
+    if not holiday_set:
+        holiday_set = update_japanese_holiday()
+
     if isinstance(date_data, datetime):
         # datetime は date に変換する
         date_data = date_data.date()
@@ -76,7 +81,3 @@ def is_holiday(date_data=date.today()):
         return True
 
     return False
-
-
-# 日本の祝日情報を初期化する
-update_japanese_holiday()
