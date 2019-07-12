@@ -1,3 +1,7 @@
+Release Notes - 2019-07-12
+--------------------------
+- [add_circleci_settings] CircleCi 設定追加
+
 Release Notes - 2019-07-11
 --------------------------
 - [lambda_version] AWS lambda対応
