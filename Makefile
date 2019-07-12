@@ -22,7 +22,7 @@ remove:
 	./node_modules/serverless/bin/serverless remove
 
 test_app:
-	python -m unittest discover -v
+	tox -e py37
 
 test: test_app flake8
 	@echo '----------------------------'
