@@ -73,9 +73,12 @@ plugins:
 # Custom settings
 custom:
   pythonRequirements:
-    dockerizePip: true
+    dockerizePip: ${self:custom.isDockerizePip.${env:CI}, self:custom.isDockerizePip.false}
     slim: true
     layer: true
+  isDockerizePip:
+    true: false
+    false: true
   prune:
     automatic: true
     number: 3
