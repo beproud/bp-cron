@@ -1,3 +1,7 @@
+Unreleased
+--------------------------
+- [circleci_deploy] CircleCi からデプロイする設定追加
+
 Release Notes - 2019-07-12
 --------------------------
 - [add_circleci_settings] CircleCi 設定追加
