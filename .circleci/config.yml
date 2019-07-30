@@ -49,7 +49,7 @@ jobs:
       - deploy:
           name: Deploy by Serverless Framework
           command: |
-            if [ "${CIRCLE_BRANCH}" == "circleci-deploy" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
             sls config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
             sls deploy
             else
