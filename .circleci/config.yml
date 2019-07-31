@@ -62,3 +62,4 @@ workflows:
             - master
         requires:
         - test-job
+  version: 2
