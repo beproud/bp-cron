@@ -59,7 +59,7 @@ workflows:
         filters:
           branches:
             only:
-            - master
+            - circleci-deploy
         requires:
         - test-job
   version: 2
