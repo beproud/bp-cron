@@ -1,57 +1,64 @@
 version: 2
 jobs:
-  build:
+  test-job:
+    working_directory: ~/bp-cron
     docker:
-      - image: nikolaik/python-nodejs:latest
-    # Show Serverless Framework log
-    environment: SLS_DEBUG=*
+    - image: nikolaik/python-nodejs:latest
     steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      # Load aws info
-      - run: echo ${ENV} > ~/.env
-      - run:
-          name: Install dependencies
-          command: |
-            python3 -m venv venv
-            source ./venv/bin/activate
-            pip install -U pip setuptools tox
-      - run:
-          name: Run test
-          command: |
-            source ./venv/bin/activate
-            tox -epy37,flake8
-      # install Serverless Framework
-      - run: npm install
-      - run:
-          name: install-serverless
-          command: npm install -g serverless@1.41.0
-      - run:
-          name: serverless-python-requirements install
-          command: sls plugin install -n serverless-python-requirements
-
-      - run:
-          name: serverless-prune-plugin install
-          command: sls plugin install -n serverless-prune-plugin
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-      - store_test_results:
-          path: test-results
-
-      - deploy:
-          name: Deploy by Serverless Framework
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            sls config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
-            sls deploy
-            else
-            echo "Not master branch so not deploying"
-            fi
+    - checkout
+    - restore_cache:
+        keys:
+        - v1-dependencies-{{ checksum "requirements.txt" }}
+        - v1-dependencies-
+    - run:
+        name: Install dependencies
+        command: |
+          python3 -m venv venv
+          source ./venv/bin/activate
+          pip install -U pip setuptools tox
+    - run:
+        name: Run test
+        command: |
+          source ./venv/bin/activate
+          tox -epy37,flake8
+    - save_cache:
+        paths:
+        - ./venv
+        key: v1-dependencies-{{ checksum "requirements.txt" }}
+    - store_test_results:
+        path: test-results
+  deploy-job:
+    working_directory: ~/bp-cron
+    docker:
+    - image: nikolaik/python-nodejs:latest
+    steps:
+    - checkout
+    - run:
+        command: echo ${ENV} > ~/.env
+    - run:
+        command: npm install
+    - run:
+        name: install-serverless
+        command: npm install -g serverless@1.41.0
+    - run:
+        name: serverless-python-requirements install
+        command: sls plugin install -n serverless-python-requirements@4.3.0
+    - run:
+        name: serverless-prune-plugin install
+        command: sls plugin install -n serverless-prune-plugin@1.3.2
+    - deploy:
+        name: Deploy by Serverless Framework
+        command: |
+          sls config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
+          sls deploy
+workflows:
+  test-and-deploy:
+    jobs:
+    - test-job
+    - deploy-job:
+        filters:
+          branches:
+            only:
+            - master
+        requires:
+        - test-job
