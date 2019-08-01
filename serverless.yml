@@ -73,7 +73,8 @@ plugins:
 # Custom settings
 custom:
   pythonRequirements:
-    dockerizePip: ${self:custom.isDockerizePip.${env:CI}, self:custom.isDockerizePip.false}
+    # ref: https://qiita.com/sot528/items/6bdf6857ae1076f2a7a2
+    dockerizePip: ${self:custom.isDockerizePip.${env:CIRCLECI}, self:custom.isDockerizePip.false}
     slim: true
     layer: true
   isDockerizePip:
