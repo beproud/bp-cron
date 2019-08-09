@@ -21,12 +21,10 @@ SCOPES = [
 
 def get_credentials():
     if not settings.DEBUG and not os.path.isfile(settings.GOOGLE_API_CLIENT_SECRET_PATH):
-        _download_client_secret_file()
-    basepath = os.path.split(os.path.realpath(__file__))[0]
-    credential_path = os.path.join(basepath, "credential.pickle")
+        _download_google_api_auth_files()
     credentials = None
-    if os.path.exists(credential_path):
-        with open(credential_path, "rb") as token:
+    if os.path.exists(settings.GOOGLE_API_CREDENTIAL_PATH):
+        with open(settings.GOOGLE_API_CREDENTIAL_PATH, "rb") as token:
             credentials = pickle.load(token)
     if not credentials:
         if credentials and credentials.expired and credentials.refresh_token:
@@ -36,12 +34,12 @@ def get_credentials():
                 settings.GOOGLE_API_CLIENT_SECRET_PATH, SCOPES
             )
             credentials = flow.run_local_server()
-        with open(credential_path, "wb") as token:
+        with open(settings.GOOGLE_API_CREDENTIAL_PATH, "wb") as token:
             pickle.dump(credentials, token)
     return credentials
 
 
-def _download_client_secret_file():
+def _download_google_api_auth_files():
     try:
         if not os.path.isdir("/tmp/config"):
             os.makedirs("/tmp/config")
@@ -49,6 +47,8 @@ def _download_client_secret_file():
         bucket = s3.Bucket(settings.S3_BUCKET_NAME)
         bucket.download_file("config/client_secret.json", settings.GOOGLE_API_CLIENT_SECRET_PATH)
         logger.info("Download S3 config/client_secret.json")
+        bucket.download_file("config/client_secret.json", settings.GOOGLE_API_CREDENTIAL_PATH)
+        logger.info("Download S3 config/credential.pickle")
     except Exception as e:
         # TODO: Error handling
         logger.info(e)

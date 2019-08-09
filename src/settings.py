@@ -23,6 +23,7 @@ USER_CONFIG_PATH = os.path.join("/tmp", "config", "user.ini")
 
 # Google API
 GOOGLE_API_CLIENT_SECRET_PATH = os.path.join("/tmp", "config", "client_secret.json")
+GOOGLE_API_CREDENTIAL_PATH = os.path.join("/tmp", "config", "credential.pickle")
 
 # TODO fix
 try:
