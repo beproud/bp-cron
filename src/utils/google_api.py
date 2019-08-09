@@ -1,3 +1,4 @@
+import logging
 import os
 import pickle
 from datetime import datetime
@@ -5,18 +6,23 @@ from datetime import datetime
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+import boto3
+
+from src import settings
+
+logger = logging.getLogger()
 
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/calendar.readonly",
     "https://www.googleapis.com/auth/drive.metadata.readonly",
 ]
-CLIENT_SECRET_FILE = "client_secret.json"
 
 
 def get_credentials():
+    if not settings.DEBUG and not os.path.isfile(settings.GOOGLE_API_CLIENT_SECRET_PATH):
+        _download_client_secret_file()
     basepath = os.path.split(os.path.realpath(__file__))[0]
-    client_secret_path = os.path.join(basepath, CLIENT_SECRET_FILE)
     credential_path = os.path.join(basepath, "credential.pickle")
     credentials = None
     if os.path.exists(credential_path):
@@ -26,11 +32,25 @@ def get_credentials():
         if credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(client_secret_path, SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(
+                settings.GOOGLE_API_CLIENT_SECRET_PATH, SCOPES
+            )
             credentials = flow.run_local_server()
         with open(credential_path, "wb") as token:
             pickle.dump(credentials, token)
     return credentials
+
+
+def _download_client_secret_file():
+    try:
+        os.makedirs("/tmp/config")
+        s3 = boto3.resource("s3")
+        bucket = s3.Bucket(settings.S3_BUCKET_NAME)
+        bucket.download_file("config/client_secret.json", settings.GOOGLE_API_CLIENT_SECRET_PATH)
+        logger.info("Download S3 config/client_secret.json")
+    except Exception as e:
+        # TODO: Error handling
+        logger.info(e)
 
 
 def get_service(name, version):

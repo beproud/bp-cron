@@ -25,8 +25,8 @@ $ python3.7 -m venv env
 $ . env/bin/activate
 (env) $ pip install -r requirements.txt
 (env) $ npm install
-(env) $ cp src/settings.py.sample src/settings.py
-(env) $ vi src/settings.py
+(env) $ cp src/bpcron_settings.py.sample src/bpcron_settings.py
+(env) $ vi src/bpcron_settings.py
 (env) $ touch src/config/user.ini
 # Show https://tracery.jp/s/60e2885e834347ee93e6e6130f503770
 (env) $ vi src/config/user.ini

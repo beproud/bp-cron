@@ -15,9 +15,6 @@ SLACK_TOKEN = os.environ['SLACK_API_TOKEN']
 BOT_EMOJI = ':robot_face:'
 BOT_NAME = 'bp-cron'
 
-# Google API の credentials の保存場所
-CREDENTIAL_PATH = 'credential.pickle'
-
 DEBUG_CHANNEL = "#bot-test-wan"
 
 # S3 バケット名
@@ -25,6 +22,9 @@ S3_BUCKET_NAME = "bp-cron-serverless-deployment"
 
 # ユーザー情報の設定ファイル
 USER_CONFIG_PATH = os.path.join("tmp", "config", "user.ini")
+
+# Google API
+GOOGLE_API_CLIENT_SECRET_PATH = os.path.join("tmp", "config", "client_secret.json")
 
 # TODO fix
 try:
