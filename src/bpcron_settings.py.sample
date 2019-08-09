@@ -1,0 +1,12 @@
+# ローカルで開発する時に、settings.pyの設定値を上書きする
+
+import os
+
+# デバッグモードありでチャンネルを指定すると、すべてのメッセージがここに流れる
+DEBUG = True
+DEBUG_CHANNEL = "#bot-test"
+
+# ユーザー情報の設定ファイル
+# Ref: https://tracery.jp/s/60e2885e834347ee93e6e6130f503770
+here = os.path.dirname(__file__)
+USER_CONFIG_PATH = os.path.join(here, "config", "user.ini")

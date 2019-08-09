@@ -9,6 +9,7 @@ provider:
   logRetentionInDays: 14
   environment:
     TZ: Asia/Tokyo
+    SLACK_API_TOKEN: ${env:SLACK_API_TOKEN}
   deploymentBucket:
     name: bp-cron-serverless-deployment
 
