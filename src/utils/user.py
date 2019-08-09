@@ -41,7 +41,8 @@ def _download_userconfig_file():
     Ref: https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/limits.html
     """
     try:
-        os.makedirs("/tmp/config")
+        if not os.path.isdir("/tmp/config"):
+            os.makedirs("/tmp/config")
         s3 = boto3.resource("s3")
         bucket = s3.Bucket(settings.S3_BUCKET_NAME)
         bucket.download_file("config/user.ini", settings.USER_CONFIG_PATH)
