@@ -25,8 +25,9 @@ def post_message(
         username = settings.BOT_NAME
     if not icon_emoji:
         icon_emoji = settings.BOT_EMOJI
-    if settings.DEBUG and settings.DEBUG_CHANNEL:
-        channel = settings.DEBUG_CHANNEL
+    # if settings.DEBUG and settings.DEBUG_CHANNEL:
+    #     channel = settings.DEBUG_CHANNEL
+    channel = "p-bp-beproudbot-dev"
 
     # slack にメッセージを送信する
     slack = Slacker(settings.SLACK_TOKEN)

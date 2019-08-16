@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import pickle
 from datetime import datetime
 
@@ -8,7 +9,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import boto3
 
-from src import settings
+# TODO: lambdaにStage環境用意したら消す
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from src import settings ## NOQA
 
 logger = logging.getLogger()
 
@@ -20,8 +23,11 @@ SCOPES = [
 
 
 def get_credentials():
+
+    # lambda環境かつ、/tmp/直下にGoogle APIアクセスに必要なファイルがなければs3からダウンロード
     if not settings.DEBUG and not os.path.isfile(settings.GOOGLE_API_CLIENT_SECRET_PATH):
         _download_google_api_auth_files()
+
     credentials = None
     if os.path.exists(settings.GOOGLE_API_CREDENTIAL_PATH):
         with open(settings.GOOGLE_API_CREDENTIAL_PATH, "rb") as token:
@@ -40,9 +46,10 @@ def get_credentials():
 
 
 def _download_google_api_auth_files():
+    """ s3に置いたGooleAPI認証ファイルをダウンロードする """
+    if not os.path.isdir("/tmp/config"):
+        os.makedirs("/tmp/config")
     try:
-        if not os.path.isdir("/tmp/config"):
-            os.makedirs("/tmp/config")
         s3 = boto3.resource("s3")
         bucket = s3.Bucket(settings.S3_BUCKET_NAME)
         bucket.download_file("config/client_secret.json", settings.GOOGLE_API_CLIENT_SECRET_PATH)

@@ -17,13 +17,15 @@ BOT_NAME = 'bp-cron'
 
 # S3 バケット名
 S3_BUCKET_NAME = "bp-cron-serverless-deployment"
+# S3 設定ファイルが格納されているフォルダ
+CONFIG_PATH = os.path.join("/tmp", "config")
 
 # ユーザー情報の設定ファイル
-USER_CONFIG_PATH = os.path.join("/tmp", "config", "user.ini")
+USER_INFO_PATH = os.path.join(CONFIG_PATH, "user.ini")
 
 # Google API
-GOOGLE_API_CLIENT_SECRET_PATH = os.path.join("/tmp", "config", "client_secret.json")
-GOOGLE_API_CREDENTIAL_PATH = os.path.join("/tmp", "config", "credential.pickle")
+GOOGLE_API_CLIENT_SECRET_PATH = os.path.join(CONFIG_PATH, "client_secret.json")
+GOOGLE_API_CREDENTIAL_PATH = os.path.join(CONFIG_PATH, "credential.pickle")
 
 # TODO fix
 try:

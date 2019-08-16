@@ -4,11 +4,14 @@ import os
 
 # デバッグモードありでチャンネルを指定すると、すべてのメッセージがここに流れる
 DEBUG = True
-DEBUG_CHANNEL = "#bot-test"
+DEBUG_CHANNEL = "#bot-test-channel"
 
 here = os.path.dirname(__file__)
+
 # ユーザー情報の設定ファイル
 # Ref: https://tracery.jp/s/60e2885e834347ee93e6e6130f503770
-USER_CONFIG_PATH = os.path.join(here, "config", "user.ini")
+USER_INFO_PATH = os.path.join(here, "config", "user.ini")
+
 # Google API の認証情報
-GOOGLE_API_CLIENT_SECRET_PATH = os.path.join(here, "utils", "client_secret.json")
+GOOGLE_API_CLIENT_SECRET_PATH = os.path.join(here, "config", "client_secret.json")
+GOOGLE_API_CREDENTIAL_PATH = os.path.join(here, "config", "credential.pickle")
