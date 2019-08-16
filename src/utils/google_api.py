@@ -47,7 +47,7 @@ def _download_google_api_auth_files():
         bucket = s3.Bucket(settings.S3_BUCKET_NAME)
         bucket.download_file("config/client_secret.json", settings.GOOGLE_API_CLIENT_SECRET_PATH)
         logger.info("Download S3 config/client_secret.json")
-        bucket.download_file("config/client_secret.json", settings.GOOGLE_API_CREDENTIAL_PATH)
+        bucket.download_file("config/credential.pickle", settings.GOOGLE_API_CREDENTIAL_PATH)
         logger.info("Download S3 config/credential.pickle")
     except Exception as e:
         # TODO: Error handling
