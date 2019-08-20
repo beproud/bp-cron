@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 
-from dateutil import parser, tz
+from dateutil import parser
 from slacker import Error
 
 from src.utils import holiday, slack, user
@@ -147,7 +147,6 @@ def is_send_message(event, now):
     start = parser.parse(event["start"]["dateTime"]).replace(tzinfo=None)
     if "location" not in event:
         return channel, False
-    # now = datetime.now(tz.gettz("Asia/Tokyo"))
     # 開始時刻が現在時刻より前のイベントを対象にする
     if now > start:
         return channel, False

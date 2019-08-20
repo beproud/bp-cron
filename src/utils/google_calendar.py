@@ -43,5 +43,6 @@ def get_events(calendar_id, time_min, time_max):
     )
 
     events = event_results.get("items", [])
+    print(events)
 
     return events
