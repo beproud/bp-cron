@@ -20,14 +20,13 @@ def post_message(
     :param attachments: メッセージのアタッチメント
     :param icon_emoji: ユーザーのアイコン
     """
-    # logger.debug("Slack post message: channel=%s", channel)
+    logger.debug("Slack post message: channel=%s", channel)
     if not username:
         username = settings.BOT_NAME
     if not icon_emoji:
         icon_emoji = settings.BOT_EMOJI
-    # if settings.DEBUG and settings.DEBUG_CHANNEL:
-    #     channel = settings.DEBUG_CHANNEL
-    channel = "bot-test-wan"
+    if settings.DEBUG and settings.DEBUG_CHANNEL:
+        channel = settings.DEBUG_CHANNEL
 
     # slack にメッセージを送信する
     slack = Slacker(settings.SLACK_TOKEN)
