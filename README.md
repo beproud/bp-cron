@@ -25,10 +25,10 @@ $ python3.7 -m venv env
 $ . env/bin/activate
 (env) $ pip install -r requirements.txt
 (env) $ npm install
-(env) $ cp src/settings.py.sample src/settings.py
-(env) $ vi src/settings.py
+(env) $ cp src/bpcron_settings.py.sample src/bpcron_settings.py
+(env) $ vi src/bpcron_settings.py
 (env) $ touch src/config/user.ini
-# Show https://tracery.jp/s/60e2885e834347ee93e6e6130f503770
+# Copy from https://tracery.jp/s/60e2885e834347ee93e6e6130f503770
 (env) $ vi src/config/user.ini
 ```
 
@@ -64,7 +64,7 @@ Please use `make <target>' where <target> is one of
 5. 「認証情報を作成」→「OAuth クライアント ID」→「その他」を選択→「作成」
 6. OAuth クライアント IDがダイアログで表示されるので「OK」をクリックして閉じる
 7. 右端のダウンロードボタンをクリックして、 `client_secret_XXXX.json` をダウンロードする
-8. ファイル名を `client_secret.json` に変更する
+8. ファイル名を `client_secret.json` に変更して `src/config` 直下に配置する
 
 ## credentials を生成
 

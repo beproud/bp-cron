@@ -1,30 +1,54 @@
 version: 2
 jobs:
-  build:
+  test-job:
+    working_directory: ~/bp-cron
     docker:
-      - image: circleci/python:3.7.0
+    - image: circleci/python:3.7.0-node
     steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run:
-          name: Install dependencies
-          command: |
-            python3 -m venv venv
-            source ./venv/bin/activate
-            pip install -U pip setuptools tox
-      - run:
-          name: Run test
-          command: |
-            source ./venv/bin/activate
-            tox -epy37,flake8
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-      - store_test_results:
-          path: test-results
+    - checkout
+    - restore_cache:
+        keys:
+        - v1-dependencies-{{ checksum "requirements.txt" }}
+        - v1-dependencies-
+    - run:
+        name: Install dependencies
+        command: |
+          python3 -m venv venv
+          source ./venv/bin/activate
+          pip install -U pip setuptools tox
+    - run:
+        name: Run test
+        command: |
+          source ./venv/bin/activate
+          tox -epy37,flake8
+    - save_cache:
+        paths:
+        - ./venv
+        key: v1-dependencies-{{ checksum "requirements.txt" }}
+    - store_test_results:
+        path: test-results
+  deploy-job:
+    working_directory: ~/bp-cron
+    docker:
+    - image: circleci/python:3.7.0-node
+    steps:
+    - checkout
+    - run:
+        command: npm install
+    - deploy:
+        name: Deploy by Serverless Framework
+        command: |
+          /home/circleci/bp-cron/node_modules/serverless/bin/serverless config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
+          /home/circleci/bp-cron/node_modules/serverless/bin/serverless deploy
+workflows:
+  test-and-deploy:
+    jobs:
+    - test-job
+    - deploy-job:
+        filters:
+          branches:
+            only:
+            - master
+        requires:
+        - test-job
+  version: 2

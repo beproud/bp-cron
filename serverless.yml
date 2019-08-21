@@ -9,6 +9,7 @@ provider:
   logRetentionInDays: 14
   environment:
     TZ: Asia/Tokyo
+    SLACK_API_TOKEN: ${env:SLACK_API_TOKEN}
   deploymentBucket:
     name: bp-cron-serverless-deployment
 
@@ -42,6 +43,7 @@ functions:
   # https://tracery.jp/s/f4c338a716074e17bbb242a696de006c
   birthday:
     handler: src/handlers/birthday.job
+    timeout: 30
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
@@ -51,6 +53,7 @@ functions:
   # https://tracery.jp/s/08a63d6bcaba4e7388af40de3dc4453c
   meeting_reminder:
     handler: src/handlers/meeting_reminder.job
+    timeout: 30
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
@@ -60,6 +63,7 @@ functions:
   # https://tracery.jp/s/f34f8f8f368b4c3c9ef5726375e08c22
   meeting_reminder_recent:
     handler: src/handlers/meeting_reminder.recent
+    timeout: 30
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
@@ -73,12 +77,13 @@ plugins:
 # Custom settings
 custom:
   pythonRequirements:
-    dockerizePip: true
+    # ref: https://qiita.com/sot528/items/6bdf6857ae1076f2a7a2
+    dockerizePip: ${self:custom.isDockerizePip.${env:CIRCLECI}, self:custom.isDockerizePip.false}
     slim: true
     layer: true
+  isDockerizePip:
+    true: false
+    false: true
   prune:
     automatic: true
     number: 3
-
-# lambda
-timeout: 60

@@ -23,8 +23,8 @@ def get_events(calendar_id, time_min, time_max):
     * https://developers.google.com/resources/api-libraries/documentation/calendar/v3/python/latest/calendar_v3.events.html#list # NOQA
 
     :param str calendar_id: カレンダーID
-    :param datetime time_min: 検索範囲の開始日時
-    :param datetime time_max: 検索範囲の終了日時
+    :param datetime time_min: 値より以降の終了日時のカレンダーを取得
+    :param datetime time_max: 値より以前の開始日時のカレンダーを取得
     """
     # カレンダーAPIに接続
     service = get_service("calendar", "v3")
@@ -43,5 +43,6 @@ def get_events(calendar_id, time_min, time_max):
     )
 
     events = event_results.get("items", [])
+    print(events)
 
     return events
