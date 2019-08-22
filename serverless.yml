@@ -67,7 +67,7 @@ functions:
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
-      - schedule: cron(0/15 9-23 * * ? *)
+      - schedule: cron(0/15 * * * ? *)
 
 # Plugins
 plugins:
