@@ -1,6 +1,10 @@
 Unreleased
 --------------------------
 
+Release Notes - 2019-10-30
+--------------------------
+- [update-serverless] セキュリティアラートが発生している件の対応
+
 Release Notes - 2019-08-21
 --------------------------
 - [circleci_deploy] CircleCi からデプロイする設定追加
