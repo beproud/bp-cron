@@ -48,7 +48,7 @@ workflows:
         filters:
           branches:
             only:
-            - update-serverless
+            - master
         requires:
         - test-job
   version: 2
