@@ -11,6 +11,7 @@ BAR = "bar(20)"
 SHOWROOM = "showroom(5)"
 MADOGIWA = "madogiwa(6)"
 ZOOM_TAKANORY = "Zoom takanory(100)"
+ZOOM_SALES = "Zoom sales(100)"
 
 # カレンダーのID
 CALENDAR = {
@@ -18,6 +19,7 @@ CALENDAR = {
     SHOWROOM: "beproud.jp_1886bcjnjrs50j20ip16ufnpap2io6ga68q3adpp64qj4d1k@resource.calendar.google.com",  # NOQA
     MADOGIWA: "beproud.jp_188bk12tilr6cjdlh321lefu6me0i6gb68rj4dpn70q36cpo6o@resource.calendar.google.com",  # NOQA
     ZOOM_TAKANORY: "beproud.jp_188bcfric73vejvqim1abu7mkaa9i6gb64oj6e9m6gq3ge9n60@resource.calendar.google.com",  # NOQA
+    ZOOM_SALES: "beproud.jp_18846u7mg58d2j4hlkotmddq47aps6g964pjichk6ks38co@resource.calendar.google.com",  # NOQA
 }
 
 BOT_EMOJI = ":calendar:"
@@ -34,7 +36,7 @@ def create_message(events):
     """
     msg = ""
     result = False
-    for room in BAR, SHOWROOM, MADOGIWA, ZOOM_TAKANORY:
+    for room in CALENDAR:
         # 予定があれば部屋名を追加
         if events[room]:
             result = True
@@ -48,7 +50,8 @@ def create_message(events):
 
 def job(event, context):
     """
-    今日の bar, showroom, madogiwa, zoom_takanory の予定一覧を Slack 通知する
+    今日の bar, showroom, madogiwa, zoom_takanory, zoom_sales の予定一覧を
+    Slack 通知する
     """
     logger.info("Start job")
 
@@ -91,7 +94,7 @@ def _send_next_meeting_message(room, event, channel):
     """
     次のミーティング情報を Slack で送信する
 
-    :param str room: 部屋の名前(bar, showroom, madogiwa, zoom_takanory)
+    :param str room: 部屋の名前(bar, showroom, madogiwa, zoom_takanory, zoom_sales)
     :param event: イベント情報
     :param channel: POSTするSlackチャンネル
     https://developers.google.com/google-apps/calendar/v3/reference/events
