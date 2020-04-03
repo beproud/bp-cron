@@ -12,6 +12,10 @@ DEBUG = False
 # Create token https://api.slack.com/docs/oauth-test-tokens
 SLACK_TOKEN = os.environ['SLACK_API_TOKEN']
 
+# GitHub settings
+GITHUB_API_TOKEN = os.environ['GITHUB_API_TOKEN']
+GITHUB_ORGANIZATION = os.environ['GITHUB_ORGANIZATION']
+
 BOT_EMOJI = ':robot_face:'
 BOT_NAME = 'bp-cron'
 

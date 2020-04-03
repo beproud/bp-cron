@@ -10,6 +10,9 @@ provider:
   environment:
     TZ: Asia/Tokyo
     SLACK_API_TOKEN: ${env:SLACK_API_TOKEN}
+    GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
+    GITHUB_ORGANIZATION: ${env:GITHUB_ORGANIZATION}
+    GITHUB_GITHUB_SPREADSHEET_URL: ${env:GITHUB_SPREADSHEET_URL}
   deploymentBucket:
     name: bp-cron-serverless-deployment
 
@@ -68,6 +71,12 @@ functions:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
       - schedule: cron(0/15 0-9 * * ? *)
+
+  github_notification:
+    handler: src/handlers/github_reminder.notify_member_check
+    timeout: 30
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
 
 # Plugins
 plugins:
