@@ -10,14 +10,15 @@ DEBUG = False
 # Slack settings
 
 # Create token https://api.slack.com/docs/oauth-test-tokens
-SLACK_TOKEN = os.environ['SLACK_API_TOKEN']
+SLACK_TOKEN = os.environ["SLACK_API_TOKEN"]
 
 # GitHub settings
-GITHUB_API_TOKEN = os.environ['GITHUB_API_TOKEN']
-GITHUB_ORGANIZATION = os.environ['GITHUB_ORGANIZATION']
+GITHUB_API_TOKEN = os.environ["GITHUB_API_TOKEN"]
+GITHUB_ORGANIZATION = os.environ["GITHUB_ORGANIZATION"]
+GITHUB_SPREADSHEET_URL = os.environ["GITHUB_SPREADSHEET_URL"]
 
-BOT_EMOJI = ':robot_face:'
-BOT_NAME = 'bp-cron'
+BOT_EMOJI = ":robot_face:"
+BOT_NAME = "bp-cron"
 
 # S3 バケット名
 S3_BUCKET_NAME = "bp-cron-serverless-deployment"
@@ -33,6 +34,6 @@ GOOGLE_API_CREDENTIAL_PATH = os.path.join(CONFIG_PATH, "credential.pickle")
 
 # TODO fix
 try:
-    from src.bpcron_settings import * # NOQA
+    from src.bpcron_settings import *  # NOQA
 except Exception:
     pass
