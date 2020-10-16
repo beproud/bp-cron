@@ -10,6 +10,9 @@ provider:
   environment:
     TZ: Asia/Tokyo
     SLACK_API_TOKEN: ${env:SLACK_API_TOKEN}
+    GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
+    GITHUB_ORGANIZATION: ${env:GITHUB_ORGANIZATION}
+    GITHUB_SPREADSHEET_URL: ${env:GITHUB_SPREADSHEET_URL}
   deploymentBucket:
     name: bp-cron-serverless-deployment
 
@@ -68,6 +71,16 @@ functions:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
       - schedule: cron(0/15 0-9 * * ? *)
+
+  # 月1(10日)にGitHubのメンバー一覧を通知する
+  # https://tracery.jp/s/c22b55c5a944482bb40831a3aa2c52b2
+  github_notification:
+    handler: src/handlers/github_reminder.notify_member_check
+    timeout: 30
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+    events:
+      - schedule: cron(0 00 10 * ? *)
 
 # Plugins
 plugins:

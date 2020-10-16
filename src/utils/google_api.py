@@ -1,17 +1,18 @@
 import logging
 import os
-import sys
 import pickle
+import sys
 from datetime import datetime
 
+import boto3
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-import boto3
+
+from src import settings  # # NOQA
 
 # TODO: lambdaにStage環境用意したら消す
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
-from src import settings ## NOQA
+sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 logger = logging.getLogger()
 
@@ -25,7 +26,9 @@ SCOPES = [
 def get_credentials():
 
     # lambda環境かつ、/tmp/直下にGoogle APIアクセスに必要なファイルがなければs3からダウンロード
-    if not settings.DEBUG and not os.path.isfile(settings.GOOGLE_API_CLIENT_SECRET_PATH):
+    if not settings.DEBUG and not os.path.isfile(
+        settings.GOOGLE_API_CLIENT_SECRET_PATH
+    ):
         _download_google_api_auth_files()
 
     credentials = None
@@ -52,9 +55,13 @@ def _download_google_api_auth_files():
     try:
         s3 = boto3.resource("s3")
         bucket = s3.Bucket(settings.S3_BUCKET_NAME)
-        bucket.download_file("config/client_secret.json", settings.GOOGLE_API_CLIENT_SECRET_PATH)
+        bucket.download_file(
+            "config/client_secret.json", settings.GOOGLE_API_CLIENT_SECRET_PATH
+        )
         logger.info("Download S3 config/client_secret.json")
-        bucket.download_file("config/credential.pickle", settings.GOOGLE_API_CREDENTIAL_PATH)
+        bucket.download_file(
+            "config/credential.pickle", settings.GOOGLE_API_CREDENTIAL_PATH
+        )
         logger.info("Download S3 config/credential.pickle")
     except Exception as e:
         # TODO: Error handling
