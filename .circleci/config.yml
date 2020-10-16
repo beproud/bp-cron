@@ -33,6 +33,14 @@ jobs:
     - image: circleci/python:3.7.0-node
     steps:
     - checkout
+    - run:
+        name: Node.js and npm upgrade
+        command: |
+          curl -sSL "https://nodejs.org/dist/v12.16.0/node-v12.16.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v12.16.0-linux-x64/bin/node
+          curl https://www.npmjs.com/install.sh | sudo bash
+    - run:
+        name: check node version
+        command: node -v
     # Download and cache dependencies
     - restore_cache:
         keys:
