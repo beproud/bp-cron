@@ -72,11 +72,15 @@ functions:
     events:
       - schedule: cron(0/15 0-9 * * ? *)
 
+  # 月1(10日)にGitHubのメンバー一覧を通知する
+  # https://tracery.jp/s/08a63d6bcaba4e7388af40de3dc4453c
   github_notification:
     handler: src/handlers/github_reminder.notify_member_check
     timeout: 30
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
+    events:
+      - schedule: cron(0 00 10 * ? *)
 
 # Plugins
 plugins:

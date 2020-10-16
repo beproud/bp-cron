@@ -12,8 +12,7 @@ from src.utils import slack
 from src.utils.google_api import get_service
 
 BOT_EMOJI = ":github:"
-# CHANNEL = "#bp-employees"
-CHANNEL = "#bot-test-wan"
+CHANNEL = "#bp-employees"
 
 
 def add_alpha_prefix(length):
@@ -155,7 +154,7 @@ def notify_member_check(event, context):
     try:
         slack.post_message(
             CHANNEL,
-            ":octocat: < @here 月に一度のGitHubメンバー整理をしよう",
+            ":octocat: < @here GitHubメンバー整理をしよう",
             username="GitHub Information Bot",
             icon_emoji=BOT_EMOJI,
             attachments=[{
