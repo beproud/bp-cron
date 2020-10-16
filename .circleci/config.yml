@@ -53,8 +53,8 @@ jobs:
     - deploy:
         name: Deploy by Serverless Framework
         command: |
-          /home/circleci/bp-cron/node_modules/serverless/bin/serverless config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
-          /home/circleci/bp-cron/node_modules/serverless/bin/serverless deploy
+          sls config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
+          sls deploy
 workflows:
   test-and-deploy:
     jobs:
