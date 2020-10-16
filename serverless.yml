@@ -56,8 +56,8 @@ functions:
     timeout: 30
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
-#     events:
-#       - schedule: cron(0 00 * * ? *)
+    events:
+      - schedule: cron(0 00 * * ? *)
 
   # 直近開催のミーティングを通知
   # https://tracery.jp/s/f34f8f8f368b4c3c9ef5726375e08c22
@@ -66,8 +66,8 @@ functions:
     timeout: 30
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
-#     events:
-#       - schedule: cron(0/15 0-9 * * ? *)
+    events:
+      - schedule: cron(0/15 0-9 * * ? *)
 
 # Plugins
 plugins:
