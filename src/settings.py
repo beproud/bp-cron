@@ -35,5 +35,5 @@ GOOGLE_API_CREDENTIAL_PATH = os.path.join(CONFIG_PATH, "credential.pickle")
 # TODO fix
 try:
     from src.bpcron_settings import *  # NOQA
-except Exception:
+except Exception:  # NOQA
     pass

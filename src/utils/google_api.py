@@ -63,7 +63,7 @@ def _download_google_api_auth_files():
             "config/credential.pickle", settings.GOOGLE_API_CREDENTIAL_PATH
         )
         logger.info("Download S3 config/credential.pickle")
-    except Exception as e:
+    except Exception as e:  # NOQA
         # TODO: Error handling
         logger.info(e)
 

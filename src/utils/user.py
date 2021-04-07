@@ -48,6 +48,6 @@ def _download_userconfig_file():
         bucket = s3.Bucket(settings.S3_BUCKET_NAME)
         bucket.download_file("config/user.ini", settings.USER_INFO_PATH)
         logger.info("Download S3 config/user.ini")
-    except Exception as e:
+    except Exception as e:  # NOQA
         # TODO: Error handling
         logger.info(e)
