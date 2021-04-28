@@ -8,16 +8,10 @@ from src.utils import holiday, slack, user
 from src.utils.google_calendar import get_events
 
 BAR = "bar(20)"
-SHOWROOM = "showroom(5)"
-MADOGIWA = "madogiwa(6)"
-ZOOM_TAKANORY = "Zoom takanory(100)"
-ZOOM_SALES = "Zoom sales(100)"
 
 # カレンダーのID
 CALENDAR = {
     BAR: "beproud.jp_1883iqgkfa6esi3cmvg49h2i9clna6gb6cs3gd9n60s32d9l6g@resource.calendar.google.com",  # NOQA
-    ZOOM_TAKANORY: "beproud.jp_188bcfric73vejvqim1abu7mkaa9i6gb64oj6e9m6gq3ge9n60@resource.calendar.google.com",  # NOQA
-    ZOOM_SALES: "beproud.jp_18846u7mg58d2j4hlkotmddq47aps6g964pjichk6ks38co@resource.calendar.google.com",  # NOQA
 }
 
 BOT_EMOJI = ":calendar:"
