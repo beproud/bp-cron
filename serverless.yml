@@ -13,6 +13,7 @@ provider:
     GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
     GITHUB_ORGANIZATION: ${env:GITHUB_ORGANIZATION}
     GITHUB_SPREADSHEET_URL: ${env:GITHUB_SPREADSHEET_URL}
+    SENTRY_NOTIFY_LIST: ${env:SENTRY_NOTIFY_LIST}
   deploymentBucket:
     name: bp-cron-serverless-deployment
 
@@ -81,6 +82,16 @@ functions:
       - {Ref: PythonRequirementsLambdaLayer}
     events:
       - schedule: cron(0 00 10 * ? *)
+
+  # SentryのWebhookをAPIGatewayのエンドポイントで受けてLambdaでSlackに通知する
+  sentry_notification:
+    handler: src/handlers/sentry_notification.job
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+    events:
+      - httpApi:
+          path: /sentry_notification
+          method: post
 
 # Plugins
 plugins:
