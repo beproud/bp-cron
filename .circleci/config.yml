@@ -49,9 +49,6 @@ jobs:
           - v1-dependencies-
     # install Serverless Framework
     - run:
-        name: install-serverless
-        command: sudo npm install -g serverless@2.7.0
-    - run:
         command: npm install
     - save_cache:
         paths:
@@ -61,8 +58,8 @@ jobs:
     - deploy:
         name: Deploy by Serverless Framework
         command: |
-          sls config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
-          sls deploy
+          npx sls config credentials -k ${AWS_ACCESS_KEY_ID} -s ${AWS_SECRET_ACCESS_KEY} -p aws
+          npx sls deploy
 workflows:
   test-and-deploy:
     jobs:
