@@ -13,6 +13,7 @@ provider:
     GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
     GITHUB_ORGANIZATION: ${env:GITHUB_ORGANIZATION}
     GITHUB_SPREADSHEET_URL: ${env:GITHUB_SPREADSHEET_URL}
+    CIRCLECI: ${env:CIRCLECI, "false"}
   deploymentBucket:
     name: bp-cron-serverless-deployment
 
